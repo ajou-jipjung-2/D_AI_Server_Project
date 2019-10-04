@@ -15,11 +15,11 @@
 ### D_AI_Service
 - 기본 서비스 기능을 제공하는 app
 
-
 ## 실행방법
     가상환경 설치하기(D_AI_Project에서 아래의 코드 입력하기)
     $ python -m venv myvenv
     $ pip install django
     프로젝트 실행하기
+    $ python manage.py runserver
 
 
