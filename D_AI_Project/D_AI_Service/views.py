@@ -8,3 +8,9 @@ def idea(request):
 
 def mindmap(request):
     return render(request, 'mindmap.html')
+
+def ideaInfo(request):
+    return render(request, 'ideaInfo.html')
+
+def competition(request):
+    return render(request, 'competition.html')
