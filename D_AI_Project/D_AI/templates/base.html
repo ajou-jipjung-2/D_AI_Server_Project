@@ -5,7 +5,7 @@
     {% load staticfiles %}
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://kit.fontawesome.com/85b3f472d1.js"></script>
     <script src="{% static 'js/go.js' %}"></script>
     
@@ -96,7 +96,7 @@
     </header>
 
     <!-- main -->
-    <div class="container">
+    <div class="container" style="width: 100%; margin: auto">
 
         {% block content %}
         {% endblock %}
@@ -105,8 +105,8 @@
 
 
     <!-- Footer -->
-    <footer>
-    </footer>
+<!--    <footer>-->
+<!--    </footer>-->
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

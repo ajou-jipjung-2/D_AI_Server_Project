@@ -4,15 +4,20 @@
 {% load staticfiles %}
     {% endblock %}
     {% block content %}
-    <div id="sample">
-  <div id="myDiagramDiv" style="border: solid 1px black; width:100%; min-height: 400px; height: max-content"></div>
+    <div id="gridDiv" style="width: 100%; margin: 0px">
+        <div class="input-group">
+    <input type="text" class="form-control" value="zzz">
+    <span class="input-group-btn">
+        <button type="button" class="btn btn-default">Search</button>
+    </span>
+</div>
+</div>
+  <div id="myDiagramDiv" style="border: solid 1px black; width:100%; max-width: 3000px; height: 400px"></div>
 
-  <button id="SaveButton" onclick="save()">Save</button>
-  <button onclick="load()">Load</button>
-  <button onclick="layoutAll()">Layout</button>
-  Diagram Model saved in JSON format:
-  <br />
-  <textarea id="mySavedModel" style="width:100%;height:400px">
+<!--  <button id="SaveButton" onclick="save()">Save</button>-->
+<!--  <button onclick="load()">Load</button>-->
+        <div id="buttonDiv"><button onclick="layoutAll()">Layout</button></div>
+  <textarea id="mySavedModel" style="width:100%; visibility: hidden">
 { "class": "go.TreeModel",
   "nodeDataArray": [
 {"key":0, "text":"Mind Map", "loc":"0 0"},
@@ -56,10 +61,12 @@
             "commandHandler.deletesTree": true,
             "draggingTool.dragsTree": true,
             "undoManager.isEnabled": true
+
           });
 
       // when the document is modified, add a "*" to the title and enable the "Save" button
       myDiagram.addDiagramListener("Modified", function(e) {
+          console.log("change")
         var button = document.getElementById("SaveButton");
         if (button) button.disabled = !myDiagram.isModified;
         var idx = document.title.indexOf("*");
@@ -257,7 +264,8 @@
       }
     }
 
-    function addNodeAndLink(e, obj) {
+    function addNodeAndLink(e, obj) { //+를 눌렀을 떄 작동하는 부분 연동해서 내용 변경 가능할듯
+        console.log("check addnodeandlink")
       var adorn = obj.part;
       var diagram = adorn.diagram;
       diagram.startTransaction("Add Node");
@@ -272,6 +280,20 @@
       // if the new node is off-screen, scroll the diagram to show the new node
       var newnode = diagram.findNodeForData(newdata);
       if (newnode !== null) diagram.scrollToRect(newnode.actualBounds);
+      layoutAll();
+      // while(1){
+          var vpb = myDiagram.viewportBounds;
+          var db = myDiagram.documentBounds;
+        console.log(vpb.height)
+        console.log(db.height)
+          if(vpb.height<db.height){
+              value = $('#myDiagramDiv').height()
+              $('#myDiagramDiv').height(value + db.height-vpb.height)
+          }
+          else{
+              // break;
+          }
+      // }
     }
 
     function layoutTree(node) {
