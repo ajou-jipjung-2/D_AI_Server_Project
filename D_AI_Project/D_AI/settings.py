@@ -1,4 +1,5 @@
 import os
+from . import keyvalue as kv
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -57,8 +58,15 @@ WSGI_APPLICATION = 'D_AI.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': kv.get_dbname(),
+        'USER': kv.get_username(),
+        'PASSWORD': kv.get_pw(),
+        'HOST': kv.get_hostname(),
+        'PORT': '3306',
+        'OPTIONS': {
+            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"'
+        }
     }
 }
 
