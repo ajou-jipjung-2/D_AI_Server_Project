@@ -6,7 +6,7 @@
 <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://kit.fontawesome.com/85b3f472d1.js"></script>
     
     <!-- Bootstrap CSS -->
@@ -94,7 +94,7 @@
     </header>
 
     <!-- main -->
-    <div class="container">
+    <div class="container" style="width: 100%; margin: auto">
 
         {% block content %}
         {% endblock %}
@@ -103,8 +103,8 @@
 
 
     <!-- Footer -->
-    <footer>
-    </footer>
+<!--    <footer>-->
+<!--    </footer>-->
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -116,7 +116,7 @@
 
     {% block script %}
     {% endblock %}
-
+<script src="{% static '/js/clean-blog.min.js' %}"></script>
 </body>
 
 </html>
