@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load staticfiles %}
 <script>
     function change0() {
         var elements = document.getElementsByClassName("all");
@@ -41,6 +42,11 @@
                 document.ideaForm.keyword2.focus();
                 return false;
             }
+            else if(document.ideaForm.association.value==''){
+                alert("연관도를 선택하세요!");
+                document.ideaForm.keyword1.focus();
+                return false;
+            }
             else{
                 document.ideaForm.submit();
                 return true;
@@ -48,56 +54,90 @@
         }
     }
 </script>
-<h1>D-AI Idea Service</h1>
-<div style="display: flex; justify-content: space-around;">
-    <h6>키워드 개수를 선택해주세요</h6>
-    <button type="button" onclick="change0();">1개</button>
-    <button type="button" onclick="change1();">2개</button>
-</div>
-<div>
+<style>
+    .num-button{
+        border-radius: 40px 80px / 80px 40px;
+        background-color: white;
+        padding: 15px;
+        border: 1px solid #dddddd;
+        background-color: white;
+        margin-bottom: 15px;
+        box-sizing:border-box;
+    }
+    .sub-button{
+        margin-left: 10px;
+        width: 100px;
+        height: 60px;
+        color: white;
+        background-color: rgb(57, 141, 167);
+        border: 0 solid #82E8D9;
+        border-radius: 40px 80px / 80px 40px;
+    }
+    .form-group{
+        display: flex;
+        justify-content: space-around;
+    }
+    .form-control{
+        height: 60px;
+        display: flex;
+        justify-content: space-around;
+        font-size: 20px;
+        background-color: rgba(131, 203, 224, 0.486);
+        border-radius: 40px 80px / 80px 40px;
+    }
+    .clear{
+        clear: both;
+    }
+</style>
+<h1>D-AI Idea</h1>
+<h4>키워드 개수를 선택해주세요</h4><br>
+<div style="display: flex; justify-content: space-around; font-family: 'BBTreeGB';">
+    <button type="button" onclick="change0();" class="num-button"><img src="{% static '/images/1.jpg' %}" width="77"
+        height="73" alt=".."><br>1개</button>
+    <button type="button" onclick="change1();" class="num-button"><img src="{% static '/images/2.jpg' %}" width="77"
+        height="73" alt=".."><br>2개</button>
+</div><br>
+<div align="center" style="font-family: 'BBTreeGB';">
 <form method="POST" action="{% url 'ideacreate' %}" name="ideaForm">
-        {% csrf_token %}
-    <span class="all type0 type1" style="display:none">
-        <div class="form-group">
-            <label for="exampleFormControlInput1">키워드 A</label>
-            <input name="keyword1" type="text" value="" class="form-control" id="exampleFormControlInput1"
-                placeholder="키워드 A">
-        </div>
-    </span>
-    <span class="all type1" style="display:none">
-        <div class="form-group">
-            <label for="exampleFormControlInput1">키워드 B</label>
-            <input name="keyword2" type="text" value="" class="form-control" id="exampleFormControlInput1"
-                placeholder="키워드 B">
-        </div>
-    </span>
-    <span class="all type0 type1" style="display:none">
-        <div class="form-group">
-            <label for="exampleFormControlInput1">연관도</label>
-            <select name="association" class="form-control" id="exampleFormControlSelect1">
-                <option value="0.9" selected>90%</option>
-                <option value="0.8">80%</option>
-                <option value="0.7">70%</option>
-                <option value="0.6">60%</option>
-                <option value="0.5">50%</option>
-                <option value="0.4">40%</option>
-                <option value="0.3">30%</option>
-                <option value="0.2">20%</option>
-                <option value="0.1">10%</option>
-            </select>
-        </div>
-    </span>
-    <span class="all type0 type1" style="display:none">
-        <input type="hidden" id="key_num" name="key_num" value="">
-    </span>
-    <input type="button" onclick="formCheck();"
-    style=" margin: 20px; width: 50%; height: 40px; color: white; background-color: #82E8D9; border: 0 solid #82E8D9;"
-    value="CREATE">
+    {% csrf_token %}
+    <div align="center" style="display: flex; justify-content: center;">
+        <span class="all type0 type1" style="display:none; float: left;">
+            <span class="form-group">
+                <input name="keyword1" type="text" value="" class="form-control" placeholder="키워드 A">
+            </span>
+        </span>
+        <span class="all type1" style="display:none; float: left;">
+            <span class="form-group">
+                <input name="keyword2" type="text" value="" class="form-control" placeholder="키워드 B">
+            </span>
+        </span>
+        <span class="all type0 type1" style="display:none; float: left;">
+            <span class="form-group">
+                <select name="association" class="form-control">
+                    <option value="" selected>연관도</option>
+                    <option value="0.9">90%</option>
+                    <option value="0.8">80%</option>
+                    <option value="0.7">70%</option>
+                    <option value="0.6">60%</option>
+                    <option value="0.5">50%</option>
+                    <option value="0.4">40%</option>
+                    <option value="0.3">30%</option>
+                    <option value="0.2">20%</option>
+                    <option value="0.1">10%</option>
+                </select>
+            </span>
+        </span>
+        <span class="all type0 type1" style="display:none">
+            <input type="hidden" id="key_num" name="key_num" value="">
+        </span>
+        <input type="button" class="sub-button" onclick="formCheck();" value="CREATE">
+    </div>
 </form>
 </div>
 <div>
-    <br>
-    <h3>키워드 추천</h3>
+    <br><br><br>
+    <h2>키워드 추천</h2>
     <h5>여기에 랜덤으로 추천 키워드 띄워주는 거 구현하기</h5>
+    <!-- views.idea에서 링크 불러질때 랜덤으로 단어 20개씩 가져오게끔 구현하기-->
 </div>
 {% endblock %}
