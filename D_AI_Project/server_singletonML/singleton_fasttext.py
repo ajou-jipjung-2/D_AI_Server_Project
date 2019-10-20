@@ -1,7 +1,30 @@
 from gensim.models import fasttext as fText
+import pymysql
 import secrets
 import os
 import random
+from D_AI_Project.D_AI import keyvalue
+
+
+def load_label():
+    conn = pymysql.connect(host=keyvalue.get_hostname(), user=keyvalue.get_username(),
+                           password=keyvalue.get_pw(),
+                           db=keyvalue.get_dbname(), charset='utf8')
+    curs = conn.cursor()
+    sql = "select * from noun_label"
+    curs.execute(sql)
+    row = [item[1] for item in curs.fetchall()]
+    return row
+
+def load_adj():
+    conn = pymysql.connect(host=keyvalue.get_hostname(), user=keyvalue.get_username(),
+                           password=keyvalue.get_pw(),
+                           db=keyvalue.get_dbname(), charset='utf8')
+    curs = conn.cursor()
+    sql = "select * from adj_label"
+    curs.execute(sql)
+    row = [item[1] for item in curs.fetchall()]
+    return row
 
 class singleton_fasttext:
     _instance = None
@@ -18,14 +41,18 @@ class singleton_fasttext:
         cls.instance = cls._getInstance
         return cls._instance
 
+
+
     def __init__(self):
         global model, vocab_list, adj_list
         print ("print Ldsfasdfasdfasdfasdfasdfsaf",os.getcwd()) #현재 디렉토리의
         # model = fText.load_facebook_model('Z:\\study\\git\\D_AI_Server_Project\\D_AI_Project\\server_singletonML\\fasttext\\fasttext.bin')
-        model = fText.load_facebook_model(os.getcwd()+'\\server_singletonML\\fasttext\\fasttext.bin')
+        model = fText.load_facebook_model(os.getcwd()+'/server_singletonML/fasttext/fasttext.bin')
         print("load_model_success!!")
-        vocab_list = open(os.getcwd()+"\\server_singletonML\\label_list.txt", 'r', encoding="utf-8").read().split()
-        adj_list = open(os.getcwd()+"\\server_singletonML\\adj_list.txt", 'r', encoding="utf-8").read().split()
+        # vocab_list = open(os.getcwd()+"/server_singletonML/label_list.txt", 'r', encoding="utf-8").read().split()
+        vocab_list = load_label()
+        # adj_list = open(os.getcwd()+"/server_singletonML/adj_list.txt", 'r', encoding="utf-8").read().split()
+        adj_list = load_adj()
 
     def get_vocab_list(self):
         return vocab_list
