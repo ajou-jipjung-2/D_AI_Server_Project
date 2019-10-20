@@ -31,6 +31,15 @@ class singleton_fasttext:
     model = None
     vocab_list = None
     adj_list = None
+    # 초성 리스트. 00 ~ 18
+    CHOSUNG_LIST = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']
+    # 중성 리스트. 00 ~ 20
+    JUNGSUNG_LIST = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ',
+                     'ㅣ']
+    # 종성 리스트. 00 ~ 27 + 1(1개 없음)
+    JONGSUNG_LIST = [' ', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ',
+                     'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']
+
     @classmethod
     def _getInstance(cls):
         return cls._instance
@@ -55,6 +64,15 @@ class singleton_fasttext:
         vocab_list = load_label()
         # adj_list = open(os.getcwd()+"/server_singletonML/adj_list.txt", 'r', encoding="utf-8").read().split()
         adj_list = load_adj()
+
+    def end_check(w):
+        global JONGSUNG_LIST
+        ## 588개 마다 초성이 바뀜.
+        ch1 = (ord(w) - ord('가')) // 588
+        ## 중성은 총 28가지 종류
+        ch2 = ((ord(w) - ord('가')) - (588 * ch1)) // 28
+        ch3 = (ord(w) - ord('가')) - (588 * ch1) - 28 * ch2
+        return JONGSUNG_LIST[ch3]
 
     def get_vocab_list(self):
         return vocab_list
@@ -108,22 +126,73 @@ class singleton_fasttext:
         print("adj_A_list_index",adj_A_list_index)
         return adj_A_list_index
 
-    def makeSentence2(self,k1, k2,sel_N):
+    def makeSentence2(self,k1,k2,sel_N_list,num):
         global model, vocab_list, adj_list
-        select_label = sel_N
-        #     for item in sm_A_list:
-        #         if item[0]=='신호등':
-        #             select_label = item
-
-        k3 = k1 + "대신 " + k2 +"이"
         adj_A_list = []
         adj_B_list = []
+        check_point1 = self.end_check(k1[-1])
+        check_point2 = self.end_check(k2[-1])
         for adj_item in adj_list:
-            adj_A = model.similarity(adj_item, k3)
-            adj_B = model.similarity(adj_item, select_label)
-            adj_A_list.append([k3+" "+adj_item+" "+select_label, adj_A * adj_B])
-        adj_A_list = sorted(adj_A_list, key=lambda acc: acc[1], reverse=True)
-        adj_A_list_index = [i[0] for i in adj_A_list[:30]]
-        print("adj_A_list_index", adj_A_list_index)
-        return adj_A_list_index
+            if check_point2 == ' ':
+                sen1 = k1 + "대신 " + k2 + "가"
+                sen2 = k1 + "대신 " + k2 + "를"
+            else:
+                sen1 = k1 + "대신 " + k2 + "이"
+                sen2 = k1 + "대신 " + k2 + "을"
+            a = model.similarity(adj_item, sen1)
+            en = model.similarity(adj_item, sel_N_list[0])
+            b = model.similarity(adj_item, sen2)
+            ab = [[sen1, a], [sen2, b]]
+            ab = sorted(ab, key=lambda acc: acc[1], reverse=True)
+            adj_A_list.append([ab[0][0] + " " + adj_item + " " + sel_N_list[0], a * en])
+        #         if a*b > b*c:
+        #             adj_A_list.append([sen1+" "+adj_item+" "+sel_N_list[0], a * en])
+        #         else:
+        #             adj_A_list.append([sen1+" "+adj_item+" "+sel_N_list[0], b * en])
 
+        adj_A_list = sorted(adj_A_list, key=lambda acc: acc[1], reverse=True)
+        #     return adj_A_list[:num]
+
+        for adj_item in adj_list:
+            if check_point1 == ' ':
+                sen1 = k1 + "에 "
+                sen2 = k1 + "가 "
+                sen3 = k1 + "와 "
+                sen4 = k1 + "와 "
+            else:
+                sen1 = k1 + "에 "
+                sen2 = k1 + "이 "
+                sen3 = k1 + "과 "
+                sen4 = k1 + "과 "
+            if check_point2 == ' ':
+                sen1 += k2 + "를"
+                sen2 += k2 + "로"
+                sen3 += k2 + "가"
+                sen4 += k2 + "를"
+            else:
+                sen1 += k2 + "을"
+                sen2 += k2 + "으로"
+                sen3 += k2 + "이"
+                sen4 += k2 + "을"
+            a = model.similarity(adj_item, sen1)
+            en = model.similarity(adj_item, sel_N_list[1])
+            b = model.similarity(adj_item, sen2)
+            c = model.similarity(adj_item, sen3)
+            d = model.similarity(adj_item, sen4)
+            ab = [[sen1, a], [sen2, b], [sen3, c], [sen4, d]]
+            ab = sorted(ab, key=lambda acc: acc[1], reverse=True)
+            adj_B_list.append([ab[0][0] + " " + adj_item + " " + sel_N_list[0], a * en])
+        #         if a*b > b*c:
+        #             adj_A_list.append([sen1+" "+adj_item+" "+sel_N_list[0], a * b])
+        #         else:
+        #             adj_A_list.append([sen1+" "+adj_item+" "+sel_N_list[0], b * c])
+
+        adj_B_list = sorted(adj_B_list, key=lambda acc: acc[1], reverse=True)
+        adj_AB_list = [[], []]
+        adj_AB_list[0] = [i[0] for i in adj_A_list[:num]]
+        adj_AB_list[1] = [i[0] for i in adj_B_list[:num]]
+        return adj_AB_list
+
+    def makeSentence2_new(self,k1,k2,sel_N_list):
+        sentence_list=[[],[]]
+        sentence_list[0] = self.makeSentence2(k1, k2, sel_N_list[0], "대신", "가")
