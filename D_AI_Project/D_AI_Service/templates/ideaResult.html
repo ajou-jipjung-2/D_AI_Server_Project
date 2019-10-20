@@ -1,7 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>D - AI Idea</h1>
-    {% for n in N_list %}
-                <button class="print-dict" style="border: 1 solid #82E8D9; background-color: rgb(29, 76, 107);" onclick="formN('{{n}}')">{{n}}</button>
-    {% endfor %}
+<style>
+    .print-dict{
+        margin : 5px;
+        float: left;
+        width: auto;
+        height: auto;
+        padding: 5px 10px;
+        text-align: center;
+        font-family: 'BBTreeGB';
+        background-color: rgb(39, 97, 114);
+        color: white;
+        border-radius: 40px 80px / 80px 40px;
+    }
+</style>
+<h1>D - AI Idea</h1>
+<div align="center">
+    {% if S_list %}
+        <div>
+            {% for S in S_list %}
+            <span class="print-dict">{{S}}</span>
+            {% endfor %}
+        </div>
+    {% endif %}
+</div>
 {% endblock %}

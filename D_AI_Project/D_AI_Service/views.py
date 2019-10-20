@@ -38,11 +38,11 @@ def ideaResult(request):
         sel_N = request.POST["select_N"]
         print("request :",request.POST)
         if key_num=='1':
-            N_list = FT.makeSentence(keyword1,sel_N,0.3,0.7)
+            S_list = FT.makeSentence(keyword1,sel_N,0.3,0.7)
         elif key_num=='2':
-            N_list = FT.makeSentence2(keyword1,keyword2,sel_N,0.3,0.7)
-        print(N_list)
-        return render(request, 'ideaResult.html', {'N_list': N_list})
+            S_list = FT.makeSentence2(keyword1,keyword2,sel_N,0.3,0.7)
+        print(S_list)
+        return render(request, 'ideaResult.html', {'S_list': S_list})
     else:
         return render(request, 'idea.html')
 def mindmap(request):
