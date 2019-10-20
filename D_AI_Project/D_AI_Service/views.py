@@ -10,6 +10,7 @@ def home(request):
 def idea(request):
     FT = singleton_fasttext.singleton_fasttext.instance()
     if request.method == "POST":
+        FT.end_check("동")
         print("check")
         keyword1 = request.POST["keyword1"]
         keyword2 = request.POST["keyword2"]

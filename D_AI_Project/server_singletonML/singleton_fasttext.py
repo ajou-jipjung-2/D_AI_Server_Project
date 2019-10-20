@@ -65,8 +65,7 @@ class singleton_fasttext:
         # adj_list = open(os.getcwd()+"/server_singletonML/adj_list.txt", 'r', encoding="utf-8").read().split()
         adj_list = load_adj()
 
-    def end_check(w):
-        global JONGSUNG_LIST
+    def end_check(self,w):
         ## 588개 마다 초성이 바뀜.
         ch1 = (ord(w) - ord('가')) // 588
         ## 중성은 총 28가지 종류
