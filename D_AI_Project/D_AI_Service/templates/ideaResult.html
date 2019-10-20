@@ -1,5 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
     <h1>D - AI Idea</h1>
-    {{N}}
+    {% for n in N_list %}
+                <button class="print-dict" style="border: 1 solid #82E8D9; background-color: rgb(29, 76, 107);" onclick="formN('{{n}}')">{{n}}</button>
+    {% endfor %}
 {% endblock %}
