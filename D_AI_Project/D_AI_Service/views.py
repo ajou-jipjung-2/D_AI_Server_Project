@@ -20,7 +20,7 @@ def idea(request):
         if key_num=='1':
             N_list = FT.makevocab1(keyword1,float(association))
         elif key_num=='2':
-            N_list = FT.makevocab2(keyword1,keyword2,0.3,0.7)
+            N_list = FT.makevocab2(keyword1,keyword2,float(association))
         print(N_list)
         # N_list = ['당근', '사과', '포도', '딸기', '아주대', '소웨', '혁중', '지석', '도연', '2조','당근', '사과', '포도', '딸기', '아주대', '소웨', '혁중', '지석', '도연', '2조','당근', '사과', '포도', '딸기', '아주대', '소웨', '혁중', '지석', '도연', '2조']
         return render(request, 'idea.html', {'N_list': N_list,'key_list':key_list,'key_num':key_num})
@@ -38,9 +38,9 @@ def ideaResult(request):
         sel_N = request.POST["select_N"]
         print("request :",request.POST)
         if key_num=='1':
-            S_list = FT.makeSentence(keyword1,sel_N,0.3,0.7)
+            S_list = FT.makeSentence(keyword1,sel_N)
         elif key_num=='2':
-            S_list = FT.makeSentence2(keyword1,keyword2,sel_N,0.3,0.7)
+            S_list = FT.makeSentence2(keyword1,keyword2,sel_N)
         print(S_list)
         return render(request, 'ideaResult.html', {'S_list': S_list})
 
