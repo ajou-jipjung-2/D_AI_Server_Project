@@ -18,7 +18,7 @@ def idea(request):
         key_list=[keyword1,keyword2]
         print("request :",request.POST)
         if key_num=='1':
-            N_list = FT.makevocab1(keyword1,0.3,0.7)
+            N_list = FT.makevocab1(keyword1,float(association))
         elif key_num=='2':
             N_list = FT.makevocab2(keyword1,keyword2,0.3,0.7)
         print(N_list)
@@ -38,9 +38,9 @@ def ideaResult(request):
         sel_N = request.POST["select_N"]
         print("request :",request.POST)
         if key_num=='1':
-            N_list = FT.makeSentence(keyword1,sel_N,0.3,0.7)
+            N_list = FT.makeSentence(keyword1,sel_N)
         elif key_num=='2':
-            N_list = FT.makeSentence2(keyword1,keyword2,sel_N,0.3,0.7)
+            N_list = FT.makeSentence2(keyword1,keyword2,sel_N)
         print(N_list)
         return render(request, 'ideaResult.html', {'N_list': N_list})
     else:

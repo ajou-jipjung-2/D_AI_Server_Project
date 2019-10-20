@@ -1,6 +1,7 @@
 from gensim.models import fasttext as fText
 import secrets
 import os
+import random
 
 class singleton_fasttext:
     _instance = None
@@ -32,7 +33,7 @@ class singleton_fasttext:
     def get_adj_list(self):
         return adj_list
 
-    def makevocab1(slef, k1, min, max):
+    def makevocab1(slef, k1, association):
         global model, vocab_list, adj_list
         sm_A_list = []
         for vocab_item in vocab_list:
@@ -40,10 +41,14 @@ class singleton_fasttext:
             # if vocab > min and vocab < max:
             sm_A_list.append([vocab_item, vocab])
         sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
-        sm_A_list_index = [i[0] for i in sm_A_list[:30]]
-        return sm_A_list_index
+        # sm_A_list_index = [i[0] for i in sm_A_list[:30]]
+        s = int(len(sm_A_list) * association)
+        e = int(len(sm_A_list) * (association+0.1))
+        out = random.sample(sm_A_list[s:e], 30)
+        out_index = [i[0] for i in out]
+        return out_index
 
-    def makevocab2(self,k1, k2, min, max):
+    def makevocab2(self,k1, k2, association):
         global model, vocab_list, adj_list
         sm_A_list = []
         for vocab_item in vocab_list:
@@ -52,10 +57,13 @@ class singleton_fasttext:
             #         if vocab1>min and vocab1<max and vocab2>min and vocab2<max:
             sm_A_list.append([vocab_item, vocab1 * (1 - vocab2)])
         sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
-        sm_A_list_index = [i[0] for i in sm_A_list[:30]]
-        return sm_A_list_index
+        s = int(len(sm_A_list) * association)
+        e = int(len(sm_A_list) * (association + 0.1))
+        out = random.sample(sm_A_list[s:e], 30)
+        out_index = [i[0] for i in out]
+        return out_index
 
-    def makeSentence(slef,k1,sel_N, min, max):
+    def makeSentence(slef,k1,sel_N):
 
         select_label = sel_N
         # print("select_label : ", select_label[:][0])
@@ -71,7 +79,7 @@ class singleton_fasttext:
         print("adj_A_list_index",adj_A_list_index)
         return adj_A_list_index
 
-    def makeSentence2(self,k1, k2,sel_N, min, max):
+    def makeSentence2(self,k1, k2,sel_N):
         global model, vocab_list, adj_list
         select_label = sel_N
         #     for item in sm_A_list:
