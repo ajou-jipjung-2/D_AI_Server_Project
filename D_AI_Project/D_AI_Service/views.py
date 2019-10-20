@@ -1,15 +1,16 @@
 from django.shortcuts import render
 import os
 import sys
+import random
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 from D_AI_Project.server_singletonML import singleton_fasttext
 def home(request):
     return render(request, 'home.html')
 
 def idea(request):
+    FT = singleton_fasttext.singleton_fasttext.instance()
     if request.method == "POST":
         print("check")
-        FT = singleton_fasttext.singleton_fasttext.instance()
         keyword1 = request.POST["keyword1"]
         keyword2 = request.POST["keyword2"]
         association = request.POST["association"]
@@ -26,7 +27,8 @@ def idea(request):
         return render(request, 'idea.html', {'N_list': N_list,'key_list':key_list,'key_num':key_num})
     else:
         # 랜덤 키워드 10개 뽑아오는 코드 작성
-        keyword = ['당근', '사과', '포도', '딸기', '아주대', '소웨', '혁중', '지석', '도연', '2조']
+        voc_list = FT.get_vocab_list()
+        keyword = random.sample(voc_list, 10)
         return render(request, 'idea.html', {'keyword': keyword})
 
 def ideaResult(request):
