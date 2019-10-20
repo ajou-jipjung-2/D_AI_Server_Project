@@ -18,7 +18,7 @@ def idea(request):
         key_list=[keyword1,keyword2]
         print("request :",request.POST)
         if key_num=='1':
-            N_list = FT.makevocab1(keyword1,0.3,0.7)
+            N_list = FT.makevocab1(keyword1,float(association))
         elif key_num=='2':
             N_list = FT.makevocab2(keyword1,keyword2,0.3,0.7)
         print(N_list)
@@ -43,6 +43,7 @@ def ideaResult(request):
             S_list = FT.makeSentence2(keyword1,keyword2,sel_N,0.3,0.7)
         print(S_list)
         return render(request, 'ideaResult.html', {'S_list': S_list})
+
     else:
         return render(request, 'idea.html')
 def mindmap(request):
