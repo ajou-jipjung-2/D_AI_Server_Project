@@ -158,6 +158,7 @@
         <h2>새로운 키워드를 하나 선택하세요!</h2><br>
         <form method="POST" action="{% url 'ideaResult' %}" name="selectNForm">
             {% csrf_token %}
+<!--            <input type="hidden" id="keyword1" name="keyword1" value={{key_list.0}}>-->
             <input type="hidden" id="keyword1" name="keyword1" value={{key_list.0}}>
             <input type="hidden" id="keyword2" name="keyword2" value={{key_list.1}}>
             <input type="hidden" id="keynum" name="key_num" value={{key_num}}>
