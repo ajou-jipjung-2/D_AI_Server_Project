@@ -1,10 +1,28 @@
 from django.shortcuts import render
 import os
+import pymysql
+import datetime, time
+from D_AI_Project.D_AI import keyvalue
 import sys
 import random
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 from D_AI_Project.server_singletonML import singleton_fasttext
 def home(request):
+    if request.method == "POST":
+        conn = pymysql.connect(host=keyvalue.get_hostname(), user=keyvalue.get_username(),
+                               password=keyvalue.get_pw(),
+                               db=keyvalue.get_dbname(), charset='utf8')
+        curs = conn.cursor()
+        new_keyword = request.POST["new_keyword"]
+        now = datetime.datetime.utcnow()
+        # sql = "insert into noun_label"++" from noun_label"
+        sql = "insert into noun_label (noun, count, created_at) values ('" + new_keyword + "', '" + str(0) + "', '" + str(
+            now.strftime('%Y-%m-%d %H:%M:%S')) + "');"
+        # print(new_keyword)
+        curs.execute(sql)
+        conn.commit()
+        conn.close()
+
     return render(request, 'home.html')
 
 def idea(request):
