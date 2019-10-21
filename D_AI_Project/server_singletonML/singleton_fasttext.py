@@ -5,6 +5,14 @@ import os
 import random
 from D_AI_Project.D_AI import keyvalue
 
+# 초성 리스트. 00 ~ 18
+CHOSUNG_LIST = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']
+# 중성 리스트. 00 ~ 20
+JUNGSUNG_LIST = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ',
+                 'ㅣ']
+# 종성 리스트. 00 ~ 27 + 1(1개 없음)
+JONGSUNG_LIST = [' ', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ',
+                 'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']
 
 def load_label():
     conn = pymysql.connect(host=keyvalue.get_hostname(), user=keyvalue.get_username(),
@@ -31,14 +39,7 @@ class singleton_fasttext:
     model = None
     vocab_list = None
     adj_list = None
-    # 초성 리스트. 00 ~ 18
-    CHOSUNG_LIST = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']
-    # 중성 리스트. 00 ~ 20
-    JUNGSUNG_LIST = ['ㅏ', 'ㅐ', 'ㅑ', 'ㅒ', 'ㅓ', 'ㅔ', 'ㅕ', 'ㅖ', 'ㅗ', 'ㅘ', 'ㅙ', 'ㅚ', 'ㅛ', 'ㅜ', 'ㅝ', 'ㅞ', 'ㅟ', 'ㅠ', 'ㅡ', 'ㅢ',
-                     'ㅣ']
-    # 종성 리스트. 00 ~ 27 + 1(1개 없음)
-    JONGSUNG_LIST = [' ', 'ㄱ', 'ㄲ', 'ㄳ', 'ㄴ', 'ㄵ', 'ㄶ', 'ㄷ', 'ㄹ', 'ㄺ', 'ㄻ', 'ㄼ', 'ㄽ', 'ㄾ', 'ㄿ', 'ㅀ', 'ㅁ', 'ㅂ', 'ㅄ', 'ㅅ',
-                     'ㅆ', 'ㅇ', 'ㅈ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ']
+
 
     @classmethod
     def _getInstance(cls):
@@ -65,12 +66,14 @@ class singleton_fasttext:
         # adj_list = open(os.getcwd()+"/server_singletonML/adj_list.txt", 'r', encoding="utf-8").read().split()
         adj_list = load_adj()
 
-    def end_check(self,w):
+    def end_check(self, w):
+        global JONGSUNG_LIST
         ## 588개 마다 초성이 바뀜.
         ch1 = (ord(w) - ord('가')) // 588
         ## 중성은 총 28가지 종류
         ch2 = ((ord(w) - ord('가')) - (588 * ch1)) // 28
         ch3 = (ord(w) - ord('가')) - (588 * ch1) - 28 * ch2
+        print("ch 3 : "+str(ch3))
         return JONGSUNG_LIST[ch3]
 
     def get_vocab_list(self):
@@ -188,7 +191,8 @@ class singleton_fasttext:
 
         adj_B_list = sorted(adj_B_list, key=lambda acc: acc[1], reverse=True)
         adj_AB_list = [[], []]
-        adj_AB_list[0] = [i[0] for i in adj_A_list[:num]]
+        adj_AB_list[0] = [i[0] for i in adj_A_list[:num-10]]
+        print(adj_AB_list)
         adj_AB_list[1] = [i[0] for i in adj_B_list[:num]]
         return adj_AB_list
 

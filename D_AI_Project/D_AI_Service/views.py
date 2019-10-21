@@ -38,12 +38,17 @@ def ideaResult(request):
         keyword1 = request.POST["keyword1"]
         keyword2 = request.POST["keyword2"]
         key_num = request.POST["key_num"]
-        sel_N = request.POST["select_N"]
+
+        # TODO : 지우기
+        sel_N_list = list()
+        sel_N_list.append(request.POST["select_N"])
+        sel_N_list.append(request.POST["select_N"])
         print("request :",request.POST)
         if key_num=='1':
-            S_list = FT.makeSentence(keyword1,sel_N)
+            S_list = FT.makeSentence(keyword1,sel_N_list,15)
         elif key_num=='2':
-            S_list = FT.makeSentence2(keyword1,keyword2,sel_N)
+            print("keyword1 : "+keyword1)
+            S_list = FT.makeSentence2(keyword1,keyword2,sel_N_list, 15)
         print(S_list)
         return render(request, 'ideaResult.html', {'S_list': S_list})
 
