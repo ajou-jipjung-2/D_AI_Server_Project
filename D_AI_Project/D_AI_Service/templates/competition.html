@@ -1,6 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
+{% load staticfiles %}
+<style>
+    .com-button{
+        height: 125px;
+        background-color:white;
+        border-radius: 20px;
+        font-family: 'BBTreeGB';
+        margin: 10px;
+    }
+</style>
     <h1>공모전</h1>
+    <h5>다양한 공모전을 찾아보세요!</h5>
     <br>
-    <h5>준비중입니다.</h5>
+    <div align="center">
+        <a href="https://www.wevity.com/"><button class="com-button"><img style="border-radius: 20px;" src="{% static '/images/comimg1.jpg' %}" ><br>위비티</button></a>
+        <a href="http://www.detizen.com/"><button class="com-button"><img style="border-radius: 20px;" src="{% static '/images/comimg2.jpg' %}" ><br>대티즌</button></a>
+        <a href="https://www.thinkcontest.com/"><button class="com-button"><img style="border-radius: 20px;" src="{% static '/images/comimg3.jpg' %}" ><br>씽굿</button></a>
+    </div>
+    
 {% endblock %}
