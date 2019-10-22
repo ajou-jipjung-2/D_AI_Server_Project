@@ -15,6 +15,7 @@
         var key_num = document.getElementById("key_num");
         key_num.value = 1;
     }
+
     function change1() {
         var elements = document.getElementsByClassName("all");
         for (var i = 0; i < elements.length; i++) {
@@ -27,51 +28,83 @@
         var key_num = document.getElementById("key_num");
         key_num.value = 2;
     }
-    function formN(sel_N){
+
+    function formN(sel_N) {
         var select_N = document.getElementById("select_N");
         select_N.value = sel_N;
         document.selectNForm.submit();
         return true;
     }
-    function formCheck(){
-        if(document.ideaForm.key_num.value==''){
+
+    function formCheck() {
+        if (document.ideaForm.key_num.value == '') {
             alert("키워드 개수를 선택하세요!");
             return false;
         }
-        else{
-            if(document.ideaForm.keyword1.value==''){
+        else {
+            if (document.ideaForm.keyword1.value == '') {
                 alert("키워드 A를 입력하세요!");
                 document.ideaForm.keyword1.focus();
                 return false;
             }
-            else if(document.ideaForm.keyword2.value=='' && document.ideaForm.key_num.value==2){
+            else if (document.ideaForm.keyword2.value == '' && document.ideaForm.key_num.value == 2) {
                 alert("키워드 B를 입력하세요!");
                 document.ideaForm.keyword2.focus();
                 return false;
             }
-            else if(document.ideaForm.association.value==''){
+            else if (document.ideaForm.association.value == '') {
                 alert("연관도를 선택하세요!");
                 document.ideaForm.keyword1.focus();
                 return false;
             }
-            else{
+            else {
                 document.ideaForm.submit();
                 return true;
             }
         }
     }
+
+    function new_keyword_clicked(keyword) {
+        // document.getElementsByName("keyword1")
+        keyword1type = document.getElementsByClassName("type0");
+        keyword1input = document.getElementById("input_keyword1")
+        keyword2type = document.getElementsByClassName("type1");
+        keyword2input = document.getElementById("input_keyword2")
+        // keyword1type.span.input.value = keyword
+
+        var key_num = document.getElementById("key_num");
+
+        if (key_num.value == 1) {
+            keyword1input.value = keyword
+        }
+        else if (key_num.value == 2) {
+            if (keyword1input.value != '') {
+                if (keyword2input.value == '') {
+                    keyword2input.value = keyword
+                }
+            }
+            if (keyword1input.value == '') {
+                keyword1input.value = keyword
+            }
+        }
+
+        // if(keyword2type.style.display=='none'){
+        //     if()
+        // }
+    }
 </script>
 <style>
-    .num-button{
+    .num-button {
         border-radius: 40px 80px / 80px 40px;
         background-color: white;
         padding: 15px;
         border: 1px solid #dddddd;
         background-color: white;
         margin-bottom: 15px;
-        box-sizing:border-box;
+        box-sizing: border-box;
     }
-    .sub-button{
+
+    .sub-button {
         margin-left: 10px;
         width: 100px;
         height: 60px;
@@ -80,11 +113,13 @@
         border: 0 solid #82E8D9;
         border-radius: 40px 80px / 80px 40px;
     }
-    .form-group{
+
+    .form-group {
         display: flex;
         justify-content: space-around;
     }
-    .form-control{
+
+    .form-control {
         height: 60px;
         display: flex;
         justify-content: space-around;
@@ -92,7 +127,8 @@
         background-color: rgba(131, 203, 224, 0.486);
         border-radius: 40px 80px / 80px 40px;
     }
-    .print-dict{
+
+    .print-dict {
         margin-left: 10px;
         float: left;
         width: auto;
@@ -110,25 +146,29 @@
 <h2>키워드 개수를 선택해주세요.</h2><br>
 <div style="display: flex; justify-content: space-around; font-family: 'BBTreeGB';">
     <button type="button" onclick="change0();" class="num-button"><img src="{% static '/images/idea1.jpg' %}" width="77"
-        height="73" alt=".."><br>1개</button>
+                                                                       height="73" alt=".."><br>1개
+    </button>
     <button type="button" onclick="change1();" class="num-button"><img src="{% static '/images/idea2.jpg' %}" width="77"
-        height="73" alt=".."><br>2개</button>
+                                                                       height="73" alt=".."><br>2개
+    </button>
 </div><br>
 <div align="center" style="font-family: 'BBTreeGB';">
-<form method="POST" action="{% url 'idea' %}" name="ideaForm">
-    {% csrf_token %}
-    <div align="center" style="display: flex; justify-content: center;">
+    <form method="POST" action="{% url 'idea' %}" name="ideaForm">
+        {% csrf_token %}
+        <div align="center" style="display: flex; justify-content: center;">
         <span class="all type0 type1" style="display:none; float: left;">
             <span class="form-group">
-                <input name="keyword1" type="text" value="" class="form-control" placeholder="키워드 A">
+                <input id="input_keyword1" name="keyword1" type="text" value="" class="form-control"
+                       placeholder="키워드 A">
             </span>
         </span>
-        <span class="all type1" style="display:none; float: left;">
+            <span class="all type1" style="display:none; float: left;">
             <span class="form-group">
-                <input name="keyword2" type="text" value="" class="form-control" placeholder="키워드 B">
+                <input id="input_keyword2" name="keyword2" type="text" value="" class="form-control"
+                       placeholder="키워드 B">
             </span>
         </span>
-        <span class="all type0 type1" style="display:none; float: left;">
+            <span class="all type0 type1" style="display:none; float: left;">
             <span class="form-group">
                 <select name="association" class="form-control">
                     <option value="" selected>연관도</option>
@@ -140,42 +180,44 @@
                 </select>
             </span>
         </span>
-        <span class="all type0 type1" style="display:none">
+            <span class="all type0 type1" style="display:none">
             <input type="hidden" id="key_num" name="key_num" value="">
         </span>
-        <input type="button" class="sub-button" onclick="formCheck();" value="CREATE">
-    </div>
-</form>
+            <input type="button" class="sub-button" onclick="formCheck();" value="CREATE">
+        </div>
+    </form>
 </div>
 {% endif %}
 <div align="center">
     {% if N_list %}
-        <br><br><br>
-        <h2>새로운 키워드를 하나 선택하세요!</h2><br>
-        <form method="POST" action="{% url 'ideaResult' %}" name="selectNForm">
-            {% csrf_token %}
-<!--            <input type="hidden" id="keyword1" name="keyword1" value={{key_list.0}}>-->
-            <input type="hidden" id="keyword1" name="keyword1" value={{key_list.0}}>
-            <input type="hidden" id="keyword2" name="keyword2" value={{key_list.1}}>
-            <input type="hidden" id="keynum" name="key_num" value={{key_num}}>
-            <input type="hidden" id="select_N" name="select_N" value="">
-            {% for n in N_list %}
-                <button class="print-dict" style="border: 1 solid #82E8D9; background-color: rgb(29, 76, 107);" onclick="formN('{{n}}')">{{n}}</button>
-            {% endfor %}
-        </form>
+    <br><br><br>
+    <h2>새로운 키워드를 하나 선택하세요!</h2><br>
+    <form method="POST" action="{% url 'ideaResult' %}" name="selectNForm">
+        {% csrf_token %}
+        <!--            <input type="hidden" id="keyword1" name="keyword1" value={{key_list.0}}>-->
+        <input type="hidden" id="keyword1" name="keyword1" value={{key_list.0}}>
+        <input type="hidden" id="keyword2" name="keyword2" value={{key_list.1}}>
+        <input type="hidden" id="keynum" name="key_num" value={{key_num}}>
+        <input type="hidden" id="select_N" name="select_N" value="">
+        {% for n in N_list %}
+        <button class="print-dict" style="border: 1 solid #82E8D9; background-color: rgb(29, 76, 107);"
+                onclick="formN('{{n}}')">{{n}}
+        </button>
+        {% endfor %}
+    </form>
     {% endif %}
 </div>
 <div align="center">
     {% if keyword %}
-        <br><br><br>
-        <h2>랜덤 키워드 추천</h2>
-        <br>
-        <div style="display: flex; justify-content: center;">
-            {% for key in keyword %}
-            <span class="print-dict">{{key}}</span>
-            {% endfor %}
-        </div>
-        
+    <br><br><br>
+    <h2>랜덤 키워드 추천</h2>
+    <br>
+    <div style="display: flex; justify-content: center;">
+        {% for key in keyword %}
+        <button id="{{key}}" onclick="new_keyword_clicked('{{key}}')" class="print-dict">{{key}}</button>
+        {% endfor %}
+    </div>
+
     {% endif %}
 </div>
 {% endblock %}
