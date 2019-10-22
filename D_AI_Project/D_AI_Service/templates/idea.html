@@ -73,18 +73,19 @@
         // keyword1type.span.input.value = keyword
 
         var key_num = document.getElementById("key_num");
-        if(key_num.value == 1) {
+
+        if (key_num.value == 1) {
             keyword1input.value = keyword
         }
-        else if(key_num.value ==2){
+        else if (key_num.value == 2) {
             if (keyword1input.value != '') {
-            if (keyword2input.value == '') {
-                keyword2input.value = keyword
+                if (keyword2input.value == '') {
+                    keyword2input.value = keyword
+                }
             }
-        }
-        if (keyword1input.value == '') {
-            keyword1input.value = keyword
-        }
+            if (keyword1input.value == '') {
+                keyword1input.value = keyword
+            }
         }
 
         // if(keyword2type.style.display=='none'){
