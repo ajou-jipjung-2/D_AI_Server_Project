@@ -2,11 +2,11 @@ from django.shortcuts import render
 import os
 import pymysql
 import datetime, time
-# from D_AI_Project.D_AI import keyvalue
+from D_AI_Project.D_AI import keyvalue
 import sys
 import random
-# sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-# from D_AI_Project.server_singletonML import singleton_fasttext
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
+from D_AI_Project.server_singletonML import singleton_fasttext
 def home(request):
     if request.method == "POST":
         conn = pymysql.connect(host=keyvalue.get_hostname(), user=keyvalue.get_username(),
@@ -69,9 +69,11 @@ def ideaResult(request):
     else:
         return render(request, 'idea.html')
 def mindmap(request):
+    FT = singleton_fasttext.singleton_fasttext.instance()
+    keyword = "진동"
     main = {}
     main["key"] = 0
-    main["text"] = "Mind Map"
+    main["text"] = keyword
     main["loc"] = "0 0"
     main["brush"] = "#000000"
     Array = []
@@ -85,7 +87,45 @@ def mindmap(request):
         else:
             nodeDataArray+=arry[i]
     print(nodeDataArray)
-    return render(request, 'mindmap.html', {"nodeDataArray": nodeDataArray})
+    sim_table=[]
+    vocab_table=[keyword]
+    # sim_table=[[keyword,"A"],
+    #            [keyword, "B"],
+    #            [keyword, "C"],
+    #            ["A","AA"],
+    #            ["A","AB"],
+    #            ["A", "AC"],
+    #            ["B", "BC"],
+    #            ["C", "AC"]]
+    sim_list = FT.makevocab1(keyword,0.8)
+    count=5
+    while count>0 :
+        print(sim_list[0])
+        if sim_list[0] in vocab_table:
+            sim_list.pop(0)
+            continue
+        else:
+            vocab_table.append(sim_list[0])
+            sim_table.append([keyword,sim_list[0]])
+            sim_list.pop(0)
+            count-=1
+    print(sim_table)
+    for i in range(0,5):
+        sim_list = FT.makevocab1(sim_table[i][1], 0.8)
+        count = 5
+        while count > 0:
+            print(sim_list[0])
+            if sim_list[0] in vocab_table:
+                sim_list.pop(0)
+                continue
+            else:
+                vocab_table.append(sim_list[0])
+                sim_table.append([sim_table[i][1], sim_list[0]])
+                sim_list.pop(0)
+                count -= 1
+        print(sim_table)
+
+    return render(request, 'mindmap.html', {"nodeDataArray": nodeDataArray,"sim_table":str(sim_table),"keyword":keyword})
 
 def ideaInfo(request):
     return render(request, 'ideaInfo.html')

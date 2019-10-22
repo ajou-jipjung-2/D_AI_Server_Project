@@ -17,7 +17,7 @@
         <div id="buttonDiv"><button onclick="layoutAll()">Layout</button></div>
   <textarea id="mySavedModel" style="width:100%; visibility: hidden">
 { "class": "go.TreeModel",
-  "nodeDataArray": {{nodeDataArray}}
+  "nodeDataArray":{{nodeDataArray|safe}}
 }
   </textarea>
 </div>
@@ -25,7 +25,9 @@
 {% block script %}
 <script id="code">
     var color_list = ["#000000"]
+    var key_table = []
     var balance=0
+    var key_num=0
     console.log("code_stript run")
 
     function getRandomColor() {
@@ -208,9 +210,21 @@
           layoutTree(node);
         });
       });
-
-      // read in the predefined graph using the JSON format data held in the "mySavedModel" textarea
       load();
+      load_parm(myDiagram)
+      // var firstdata = {text:"test",brush: "#0FFFF0",dir:"left",parent: 0,key:1}
+      // var firstdata2 = {text:"test",brush: "#0FFFF0",dir:"right",parent: 0}
+      // var firstdata3 = {text:"test",brush: "#0FFFF0",dir:"right",parent: 1}
+      // var oldnode = myDiagram.findNodeForKey("0")
+      //   console.log("node",oldnode)
+      //   myDiagram.model.addNodeData(firstdata);
+      // myDiagram.model.addNodeData(firstdata2);
+      // myDiagram.model.addNodeData(firstdata3);
+      // // layoutTree(oldnode);
+      // myDiagram.commitTransaction("Add Node");
+      // // if (newnode !== null) myDiagram.scrollToRect(newnode.actualBounds);
+      layoutAll();
+      // read in the predefined graph using the JSON format data held in the "mySavedModel" textarea
     }
 
     function spotConverter(dir, from) {
@@ -323,8 +337,8 @@
         {
           angle: angle,
           arrangement: go.TreeLayout.ArrangementFixedRoots,
-          nodeSpacing: 5,
-          layerSpacing: 20,
+          nodeSpacing: 10,
+          layerSpacing: 50,
           setsPortSpot: false, // don't set port spots since we're managing them with our spotConverter function
           setsChildPortSpot: false
         });
@@ -362,9 +376,98 @@
       myDiagram.isModified = false;
     }
     function load() {
+        console.log("load")
       myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
       console.log("laod value",document.getElementById("mySavedModel").value)
     }
+
+    function load_parm(diagram){
+
+        keyword = "{{keyword}}"
+        sim_table = "{{sim_table|safe}}"
+        sim_table = sim_table.replace(/'/g, '"');
+        sim_table = JSON.parse(sim_table);
+        key_table.push([keyword,0])
+
+        console.log(keyword)
+        console.log(sim_table)
+
+        // var index = key_table.map(obj => obj[0]).indexOf("A");
+        // console.log("index",index)
+        sim_table.forEach(function(sim_element){
+            console.log(key_table)
+            console.log("indexof :",key_table.map(obj => obj[0]).indexOf(sim_element[0]))
+            if(key_table.map(obj => obj[0]).indexOf(sim_element[0])>-1){
+                parent_key = key_table[key_table.map(obj => obj[0]).indexOf(sim_element[0])][1]
+                var parent_node = myDiagram.findNodeForKey(parent_key)
+                console.log("parent_key",parent_key)
+                console.log("parent_node",parent_node,parent_node.data.dir,parent_node.data.brush)
+                now_dir = parent_node.data.dir
+                now_brush = parent_node.data.brush
+                key_num++
+                key_table.push([sim_element[1],key_num])
+                if(parent_key==0){
+                    if(balance>0){
+                        now_dir="left"
+                        balance-=1
+                    }
+                    else{
+                        now_dir="right"
+                        balance+=1
+                    }
+                    while(1){
+                        now_brush = getRandomColor()
+                        console.log(now_brush)
+                        if(color_list.indexOf(now_brush)<0){
+                            color_list.push(now_brush)
+                            break;
+                        }
+                    }
+                }
+                var newdata = {text:sim_element[1],brush: now_brush,dir:now_dir,parent: parent_key,key:key_num}
+                diagram.model.addNodeData(newdata);
+            }
+            // var newdata = {text:sim_element[1],brush: "#0FFFF0",dir:"left",parent: 0,key:1}
+        });
+        layoutAll();
+         var vpb = myDiagram.viewportBounds;
+          var db = myDiagram.documentBounds;
+        console.log(vpb.height)
+        console.log(db.height)
+          if(vpb.height<db.height){
+              value = $('#myDiagramDiv').height()
+              $('#myDiagramDiv').height(value + db.height-vpb.height)
+          }
+
+
+        // test_list = JSON.parse(test_list);
+        // console.log(test_list)
+        // console.log("test:",test_list[2])
+        // var firstdata = {text:"test",brush: "#0FFFF0",dir:"left",parent: 0}
+        // diagram.model.addNodeData(firstdata);
+      //    var newdata = { text: "idea", brush: now_color, dir: now_dir, parent: olddata.key};
+      // diagram.model.addNodeData(newdata);
+      // layoutTree(oldnode);
+      // diagram.commitTransaction("Add Node");
+      //
+      // // if the new node is off-screen, scroll the diagram to show the new node
+      // var newnode = diagram.findNodeForData(newdata);
+      // if (newnode !== null) diagram.scrollToRect(newnode.actualBounds);
+      // layoutAll();
+      // // while(1){
+      //     var vpb = myDiagram.viewportBounds;
+      //     var db = myDiagram.documentBounds;
+      //   console.log(vpb.height)
+      //   console.log(db.height)
+      //     if(vpb.height<db.height){
+      //         value = $('#myDiagramDiv').height()
+      //         $('#myDiagramDiv').height(value + db.height-vpb.height)
+      //     }
+      //     else{
+      //         // break;
+      //     }
+    }
+
     init()
   </script>
 {% endblock %}

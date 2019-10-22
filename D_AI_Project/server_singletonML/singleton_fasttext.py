@@ -90,7 +90,7 @@ class singleton_fasttext:
         sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
         # sm_A_list_index = [i[0] for i in sm_A_list[:30]]
         s = int(len(sm_A_list) * association)
-        e = int(len(sm_A_list) * (association+0.1))
+        e = int(len(sm_A_list) * (association+0.2))
         out = random.sample(sm_A_list[s:e], 30)
         out_index = [i[0] for i in out]
         return out_index
