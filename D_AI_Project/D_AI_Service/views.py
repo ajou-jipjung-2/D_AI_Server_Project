@@ -2,11 +2,11 @@ from django.shortcuts import render
 import os
 import pymysql
 import datetime, time
-from D_AI_Project.D_AI import keyvalue
+# from D_AI_Project.D_AI import keyvalue
 import sys
 import random
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
-from D_AI_Project.server_singletonML import singleton_fasttext
+# sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
+# from D_AI_Project.server_singletonML import singleton_fasttext
 def home(request):
     if request.method == "POST":
         conn = pymysql.connect(host=keyvalue.get_hostname(), user=keyvalue.get_username(),
@@ -69,7 +69,23 @@ def ideaResult(request):
     else:
         return render(request, 'idea.html')
 def mindmap(request):
-    return render(request, 'mindmap.html')
+    main = {}
+    main["key"] = 0
+    main["text"] = "Mind Map"
+    main["loc"] = "0 0"
+    main["brush"] = "#000000"
+    Array = []
+    Array.append(main)
+    arry = str(Array)
+    print(len(arry))
+    nodeDataArray=""
+    for i in range(len(arry)):
+        if arry[i]=='\'':
+            nodeDataArray+="\""
+        else:
+            nodeDataArray+=arry[i]
+    print(nodeDataArray)
+    return render(request, 'mindmap.html', {"nodeDataArray": nodeDataArray})
 
 def ideaInfo(request):
     return render(request, 'ideaInfo.html')
