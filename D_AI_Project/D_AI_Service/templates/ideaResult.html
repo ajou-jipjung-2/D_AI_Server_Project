@@ -17,11 +17,22 @@
 <h1>D - AI Idea</h1>
 <div align="center">
     {% if S_list %}
-        <div>
-            {% for S in S_list %}
-            <span class="print-dict">{{S}}</span>
-            {% endfor %}
-        </div>
+        {% if key_num == '1' %}
+            <div>
+                {% for S in S_list %}
+                <span class="print-dict">{{S}}</span>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% if key_num == '2' %}
+            <div>
+                {% for S_l in S_list %}
+                    {% for S in S_l %}
+                        <span class="print-dict">{{S}}</span>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
     {% endif %}
 </div>
 {% endblock %}

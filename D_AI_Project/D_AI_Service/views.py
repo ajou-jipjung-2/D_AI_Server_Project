@@ -64,7 +64,7 @@ def ideaResult(request):
             sel_N_list=[sel_N,sel_N]
             S_list = FT.makeSentence2(keyword1,keyword2,sel_N_list,20)
         print(S_list)
-        return render(request, 'ideaResult.html', {'S_list': S_list})
+        return render(request, 'ideaResult.html', {'S_list': S_list, 'key_num': key_num})
 
     else:
         return render(request, 'idea.html')

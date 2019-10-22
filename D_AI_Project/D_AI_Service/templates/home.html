@@ -14,6 +14,13 @@
         width: 400px;
         border-radius: 40px 80px / 80px 40px;
     }
+    .word-button{
+        border-color: rgb(39, 97, 114);
+    }
+    .add-button{
+        font-family: 'BBTreeGB';
+        color: rgb(39, 97, 114);
+    }
 </style>
 <div align="center">
     <h1>D-AI</h1><br>
@@ -25,10 +32,11 @@
         다양한 발상기법도 준비해두었으니, 당신이 좋은 아이디어를 얻을 수 있도록 도와드릴게요.
     </h5>
 <div>
+    <br>
     <form method="POST" action="{% url 'home' %}" name="inputKeyword">
         {% csrf_token %}
-        <input id="new_keyword" name="new_keyword" type="text" style="border-color: #82E8D9" value={{key_list.0}} >
-        <button onclick="input_new_keyword()">키워드 추가</button>
+        <input id="new_keyword" name="new_keyword" type="text" class="word-button"value={{key_list.0}} >
+        <button onclick="input_new_keyword()" class="add-button">키워드 추가</button>
     </form>
 </div>
 </div>

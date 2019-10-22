@@ -134,11 +134,11 @@ class singleton_fasttext:
         check_point2 = self.end_check(k2[-1])
         for adj_item in adj_list:
             if check_point2 == ' ':
-                sen1 = k1 + "대신 " + k2 + "가"
-                sen2 = k1 + "대신 " + k2 + "를"
+                sen1 = k1 + " 대신 " + k2 + "가"
+                sen2 = k1 + " 대신 " + k2 + "를"
             else:
-                sen1 = k1 + "대신 " + k2 + "이"
-                sen2 = k1 + "대신 " + k2 + "을"
+                sen1 = k1 + " 대신 " + k2 + "이"
+                sen2 = k1 + " 대신 " + k2 + "을"
             a = model.similarity(adj_item, sen1)
             en = model.similarity(adj_item, sel_N_list[0])
             b = model.similarity(adj_item, sen2)
@@ -189,11 +189,11 @@ class singleton_fasttext:
 
         adj_B_list = sorted(adj_B_list, key=lambda acc: acc[1], reverse=True)
         adj_AB_list = [[], []]
-        adj_AB_list[0] = [i[0] for i in adj_A_list[:num]]
+        adj_AB_list[0] = [i[0] for i in adj_A_list[:num-15]]
         adj_AB_list[1] = [i[0] for i in adj_B_list[:num]]
         print("adj_AB",adj_AB_list)
         return adj_AB_list
 
     def makeSentence2_new(self,k1,k2,sel_N_list):
         sentence_list=[[],[]]
-        sentence_list[0] = self.makeSentence2(k1, k2, sel_N_list[0], "대신", "가")
+        sentence_list[0] = self.makeSentence2(k1, k2, sel_N_list[0], " 대신", "가")
