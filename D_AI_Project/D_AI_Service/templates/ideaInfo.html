@@ -1,6 +1,26 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>아이디어 발상법</h1>
+<style>
+.idea-title{
+    color: rgb(39, 97, 114);
+}
+.idea-content{
+    font-family: 'BBTreeGB';
+}
+.ref{
+    font-family: 'BBTreeGB';
+    font-size: 10px;
+}
+</style>
+    <h1>48가지 아이디어 발상법</h1>
     <br>
-    <h5>준비중입니다.</h5>
+    <div>
+        {% for title, content in ideaList %}
+            <h2 class="idea-title">{{title}}</h2>
+            <pre class="idea-content" wrap="hard">{{content}}</pre><hr>
+        {% endfor %}
+    </div>
+    
+
+    <p align="right" class="ref">출처 : https://uxlog.com/69?fbclid=IwAR2NUDtEGB4eK-BmETXIx5J6GYthc4oYZsg2lYxBbtj6bWv73eaeFJNxux8</p>
 {% endblock %}
