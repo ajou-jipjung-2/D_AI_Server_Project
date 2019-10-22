@@ -2,7 +2,7 @@ from django.shortcuts import render
 import os
 import pymysql
 import datetime, time
-# from D_AI_Project.D_AI import keyvalue
+from D_AI_Project.D_AI import keyvalue
 import sys
 import random
 import csv
