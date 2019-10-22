@@ -105,7 +105,7 @@ class singleton_fasttext:
             sm_A_list.append([vocab_item, vocab1 * (1 - vocab2)])
         sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
         s = int(len(sm_A_list) * association)
-        e = int(len(sm_A_list) * (association + 0.1))
+        e = int(len(sm_A_list) * (association + 0.2))
         out = random.sample(sm_A_list[s:e], 30)
         out_index = [i[0] for i in out]
         return out_index
@@ -159,27 +159,32 @@ class singleton_fasttext:
                 sen2 = k1 + "가 "
                 sen3 = k1 + "와 "
                 sen4 = k1 + "와 "
+                sen5 = k1 + "를 "
             else:
                 sen1 = k1 + "에 "
                 sen2 = k1 + "이 "
                 sen3 = k1 + "과 "
                 sen4 = k1 + "과 "
+                sen5 = k1 + "을 "
             if check_point2 == ' ':
                 sen1 += k2 + "를"
                 sen2 += k2 + "로"
                 sen3 += k2 + "가"
                 sen4 += k2 + "를"
+                sen5 += k2 + "로"
             else:
                 sen1 += k2 + "을"
                 sen2 += k2 + "으로"
                 sen3 += k2 + "이"
                 sen4 += k2 + "을"
+                sen5 += k2 + "으로"
             a = model.similarity(adj_item, sen1)
             en = model.similarity(adj_item, sel_N_list[1])
             b = model.similarity(adj_item, sen2)
             c = model.similarity(adj_item, sen3)
             d = model.similarity(adj_item, sen4)
-            ab = [[sen1, a], [sen2, b], [sen3, c], [sen4, d]]
+            e = model.similarity(adj_item, sen5)
+            ab = [[sen1, a], [sen2, b], [sen3, c], [sen4, d], [sen5, e]]
             ab = sorted(ab, key=lambda acc: acc[1], reverse=True)
             adj_B_list.append([ab[0][0] + " " + adj_item + " " + sel_N_list[0], a * en])
         #         if a*b > b*c:

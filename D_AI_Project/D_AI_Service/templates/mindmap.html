@@ -17,9 +17,7 @@
         <div id="buttonDiv"><button onclick="layoutAll()">Layout</button></div>
   <textarea id="mySavedModel" style="width:100%; visibility: hidden">
 { "class": "go.TreeModel",
-  "nodeDataArray": [
-{"key":0, "text":"Mind Map", "loc":"0 0", "brush":"#000000"}
- ]
+  "nodeDataArray": {{nodeDataArray}}
 }
   </textarea>
 </div>
@@ -365,6 +363,7 @@
     }
     function load() {
       myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+      console.log("laod value",document.getElementById("mySavedModel").value)
     }
     init()
   </script>
