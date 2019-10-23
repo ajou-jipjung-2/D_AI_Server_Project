@@ -69,63 +69,65 @@ def ideaResult(request):
     else:
         return render(request, 'idea.html')
 def mindmap(request):
-    FT = singleton_fasttext.singleton_fasttext.instance()
-    keyword = "진동"
-    main = {}
-    main["key"] = 0
-    main["text"] = keyword
-    main["loc"] = "0 0"
-    main["brush"] = "#000000"
-    Array = []
-    Array.append(main)
-    arry = str(Array)
-    print(len(arry))
-    nodeDataArray=""
-    for i in range(len(arry)):
-        if arry[i]=='\'':
-            nodeDataArray+="\""
-        else:
-            nodeDataArray+=arry[i]
-    print(nodeDataArray)
-    sim_table=[]
-    vocab_table=[keyword]
-    # sim_table=[[keyword,"A"],
-    #            [keyword, "B"],
-    #            [keyword, "C"],
-    #            ["A","AA"],
-    #            ["A","AB"],
-    #            ["A", "AC"],
-    #            ["B", "BC"],
-    #            ["C", "AC"]]
-    sim_list = FT.makevocab1(keyword,0.8)
-    count=5
-    while count>0 :
-        print(sim_list[0])
-        if sim_list[0] in vocab_table:
-            sim_list.pop(0)
-            continue
-        else:
-            vocab_table.append(sim_list[0])
-            sim_table.append([keyword,sim_list[0]])
-            sim_list.pop(0)
-            count-=1
-    print(sim_table)
-    for i in range(0,5):
-        sim_list = FT.makevocab1(sim_table[i][1], 0.8)
-        count = 5
-        while count > 0:
+    if request.method == "POST":
+        FT = singleton_fasttext.singleton_fasttext.instance()
+        keyword = request.POST["keyword"]
+        main = {}
+        main["key"] = 0
+        main["text"] = keyword
+        main["loc"] = "0 0"
+        main["brush"] = "#000000"
+        Array = []
+        Array.append(main)
+        arry = str(Array)
+        print(len(arry))
+        nodeDataArray=""
+        for i in range(len(arry)):
+            if arry[i]=='\'':
+                nodeDataArray+="\""
+            else:
+                nodeDataArray+=arry[i]
+        print(nodeDataArray)
+        sim_table=[]
+        vocab_table=[keyword]
+        # sim_table=[[keyword,"A"],
+        #            [keyword, "B"],
+        #            [keyword, "C"],
+        #            ["A","AA"],
+        #            ["A","AB"],
+        #            ["A", "AC"],
+        #            ["B", "BC"],
+        #            ["C", "AC"]]
+        sim_list = FT.makevocab1(keyword,0.8)
+        count=5
+        while count>0 :
             print(sim_list[0])
             if sim_list[0] in vocab_table:
                 sim_list.pop(0)
                 continue
             else:
                 vocab_table.append(sim_list[0])
-                sim_table.append([sim_table[i][1], sim_list[0]])
+                sim_table.append([keyword,sim_list[0]])
                 sim_list.pop(0)
-                count -= 1
+                count-=1
         print(sim_table)
-
-    return render(request, 'mindmap.html', {"nodeDataArray": nodeDataArray,"sim_table":str(sim_table),"keyword":keyword})
+        for i in range(0,5):
+            sim_list = FT.makevocab1(sim_table[i][1], 0.8)
+            count = 5
+            while count > 0:
+                print(sim_list[0])
+                if sim_list[0] in vocab_table:
+                    sim_list.pop(0)
+                    continue
+                else:
+                    vocab_table.append(sim_list[0])
+                    sim_table.append([sim_table[i][1], sim_list[0]])
+                    sim_list.pop(0)
+                    count -= 1
+            print(sim_table)
+        return render(request, 'mindmap.html', {"nodeDataArray": nodeDataArray,"sim_table":str(sim_table),"keyword":keyword,"key":"1"})
+    else:
+        return render(request, 'mindmap.html', {"key":"0"})
 
 def ideaInfo(request):
     return render(request, 'ideaInfo.html')

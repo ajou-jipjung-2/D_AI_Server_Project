@@ -1,26 +1,56 @@
 {% extends 'base.html' %}
 {% block content %}
-    <h1>Mindmap.html</h1>
 {% load staticfiles %}
-    <div id="gridDiv" style="width: 100%; margin: 0px">
-        <div class="input-group">
-    <input type="text" class="form-control" value="zzz">
-    <span class="input-group-btn">
-        <button type="button" class="btn btn-default">Search</button>
-    </span>
+<style>
+  .mind-button{
+    margin: 10px;
+    width: auto;
+    height: 50px;
+    padding: 5px 10px;
+    text-align: center;
+    font-family: 'BBTreeGB';
+    background-color: rgb(39, 97, 114);
+    color: white;
+    border-radius: 40px 80px / 80px 40px;
+    font-size: 20px;
+  }
+  .mind-box{
+    margin: 10px;
+    height: 50px;
+    width: 270px;
+    font-family: 'BBTreeGB';
+    border-radius: 40px 80px / 80px 40px;
+    background-color: rgba(131, 203, 224, 0.486);
+    font-size: 20px;
+  }
+</style>
+<h1>단어 마인드맵</h1>
+
+{% if key == "0" %}
+<div id="gridDiv" style="width: 100%; margin: 0px" align="center">
+  <br>
+  <h2>원하는 키워드를 입력하세요.</h2>
+  <form method="POST" action="{% url 'mindmap' %}">
+    {% csrf_token %}
+    <input type="text" class="mind-box" value="" name="keyword" placeholder="  keyword">
+    <button type="submit" class="mind-button">검색!</button>
+  </form>
 </div>
-</div>
+{% endif %}
+{% if key == "1" %}
+<br>
   <div id="myDiagramDiv" style="border: solid 1px black; width:100%; max-width: 3000px; height: 400px"></div>
 
 <!--  <button id="SaveButton" onclick="save()">Save</button>-->
 <!--  <button onclick="load()">Load</button>-->
-        <div id="buttonDiv"><button onclick="layoutAll()">Layout</button></div>
+        <div id="buttonDiv" align="center"><button class="mind-button" onclick="layoutAll()">Layout</button></div>
   <textarea id="mySavedModel" style="width:100%; visibility: hidden">
 { "class": "go.TreeModel",
   "nodeDataArray":{{nodeDataArray|safe}}
 }
   </textarea>
 </div>
+{% endif %}
 {% endblock %}
 {% block script %}
 <script id="code">
