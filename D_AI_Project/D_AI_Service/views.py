@@ -5,6 +5,7 @@ import datetime, time
 from D_AI_Project.D_AI import keyvalue
 import sys
 import random
+import csv
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 from D_AI_Project.server_singletonML import singleton_fasttext
 def home(request):
@@ -130,7 +131,15 @@ def mindmap(request):
         return render(request, 'mindmap.html', {"key":"0"})
 
 def ideaInfo(request):
-    return render(request, 'ideaInfo.html')
+    ideaList = []
+    with open(os.path.dirname(os.path.realpath(__file__)) + '/data/idea48.csv', "r", encoding='UTF8') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            idea = []
+            idea.append(row[0])
+            idea.append(row[1])
+            ideaList.append(idea)
+    return render(request, 'ideaInfo.html', {'ideaList': ideaList})
 
 def competition(request):
     return render(request, 'competition.html')
