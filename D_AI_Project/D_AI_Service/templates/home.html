@@ -31,13 +31,5 @@
         아이디어가 잘 생각나지 않는다면 단어 마인드맵은 어떠신가요?<br>
         다양한 발상기법도 준비해두었으니, 당신이 좋은 아이디어를 얻을 수 있도록 도와드릴게요.
     </h5>
-<div>
-    <br>
-    <form method="POST" action="{% url 'home' %}" name="inputKeyword">
-        {% csrf_token %}
-        <input id="new_keyword" name="new_keyword" type="text" class="word-button"value={{key_list.0}} >
-        <button onclick="input_new_keyword()" class="add-button">키워드 추가</button>
-    </form>
-</div>
 </div>
 {% endblock %}

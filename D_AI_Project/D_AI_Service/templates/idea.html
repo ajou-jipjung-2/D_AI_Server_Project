@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% block content %}
 {% load staticfiles %}
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
     function change0
     () {
@@ -91,6 +92,13 @@
         // if(keyword2type.style.display=='none'){
         //     if()
         // }
+    }
+    function reload_keyword() {
+        // $("#random_keyword").load(window.location.href + "#random_keyword" );
+        // document.getElementById("random_keyword").reload();
+        // $("#random_keyword").load(window.location.href + "#random_keyword");
+        location.reload()
+
     }
 </script>
 <style>
@@ -207,7 +215,7 @@
     </form>
     {% endif %}
 </div>
-<div align="center">
+<div id="random_keyword" align="center">
     {% if keyword %}
     <br><br><br>
     <h2>랜덤 키워드 추천</h2>
@@ -216,8 +224,8 @@
         {% for key in keyword %}
         <button id="{{key}}" onclick="new_keyword_clicked('{{key}}')" class="print-dict">{{key}}</button>
         {% endfor %}
-    </div>
-
+    </div><br>
+    <button class="sub-button" onclick="reload_keyword()">새 키워드 추가</button>
     {% endif %}
 </div>
 {% endblock %}

@@ -14,6 +14,19 @@
     border-radius: 40px 80px / 80px 40px;
     font-size: 20px;
   }
+
+  .word-button{
+
+        border-radius: 40px 80px / 80px 40px;
+      border-color: rgb(39, 97, 114);
+  }
+  .add-button{
+
+        border-radius: 40px 80px / 80px 40px;
+    background: #57cb98;
+        font-family: 'BBTreeGB';
+        color: rgb(39, 97, 114);
+  }
   .mind-box{
     margin: 10px;
     height: 50px;
@@ -25,16 +38,20 @@
   }
 </style>
 <script>
-function formCheck() {
-  if (document.mindForm.keyword.value == '') {
-      alert("키워드를 입력해주세요!");
-      return false;
+  function input_new_keyword(){
+        alert('키워드 추가 완료')
+        location.reload()
+    }
+  function formCheck() {
+    if (document.mindForm.keyword.value == '') {
+        alert("키워드를 입력해주세요!");
+        return false;
+    }
+    else {
+        document.mindForm.submit();
+        return true;
+    }
   }
-  else {
-      document.mindForm.submit();
-      return true;
-  }
-}
 </script>
 <h1>단어 마인드맵</h1>
 
@@ -61,6 +78,15 @@ function formCheck() {
   "nodeDataArray":{{nodeDataArray|safe}}
 }
   </textarea>
+</div>
+<h3 style="text-align: center">원하는 키워드가 없으신가요??</h3>
+<div style="text-align: center">
+    <br>
+    <form method="POST" action="{% url 'home' %}" name="inputKeyword">
+        {% csrf_token %}
+        <input id="new_keyword" name="new_keyword" type="text" class="word-button"value={{key_list.0}} >
+        <button onclick="input_new_keyword()" class="add-button">키워드 추가</button>
+    </form>
 </div>
 {% endif %}
 {% endblock %}
