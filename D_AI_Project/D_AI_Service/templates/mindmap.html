@@ -24,16 +24,28 @@
     font-size: 20px;
   }
 </style>
+<script>
+function formCheck() {
+  if (document.mindForm.keyword.value == '') {
+      alert("키워드를 입력해주세요!");
+      return false;
+  }
+  else {
+      document.mindForm.submit();
+      return true;
+  }
+}
+</script>
 <h1>단어 마인드맵</h1>
 
 {% if key == "0" %}
 <div id="gridDiv" style="width: 100%; margin: 0px" align="center">
   <br>
   <h2>원하는 키워드를 입력하세요.</h2>
-  <form method="POST" action="{% url 'mindmap' %}">
+  <form method="POST" action="{% url 'mindmap' %}" name="mindForm">
     {% csrf_token %}
     <input type="text" class="mind-box" value="" name="keyword" placeholder="  keyword">
-    <button type="submit" class="mind-button">검색!</button>
+    <button type="button" class="mind-button" onclick="formCheck();">검색!</button>
   </form>
 </div>
 {% endif %}
