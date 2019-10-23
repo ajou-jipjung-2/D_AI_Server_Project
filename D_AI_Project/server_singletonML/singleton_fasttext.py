@@ -80,6 +80,18 @@ class singleton_fasttext:
     def get_adj_list(self):
         return adj_list
 
+    def makevocab(slef, k1, association):
+        global model, vocab_list, adj_list
+        sm_A_list = []
+        for vocab_item in vocab_list:
+            vocab = model.similarity(vocab_item, k1)
+            # if vocab > min and vocab < max:
+            sm_A_list.append([vocab_item, vocab])
+        sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
+        out = random.sample(sm_A_list[:30], 10)
+        out_index = [i[0] for i in out]
+        return out_index
+
     def makevocab1(slef, k1, association):
         global model, vocab_list, adj_list
         sm_A_list = []

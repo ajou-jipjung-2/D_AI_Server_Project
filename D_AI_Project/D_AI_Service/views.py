@@ -99,7 +99,7 @@ def mindmap(request):
         #            ["A", "AC"],
         #            ["B", "BC"],
         #            ["C", "AC"]]
-        sim_list = FT.makevocab1(keyword,0.8)
+        sim_list = FT.makevocab(keyword,0.8)
         count=5
         while count>0 :
             print(sim_list[0])
@@ -113,7 +113,7 @@ def mindmap(request):
                 count-=1
         print(sim_table)
         for i in range(0,5):
-            sim_list = FT.makevocab1(sim_table[i][1], 0.8)
+            sim_list = FT.makevocab(sim_table[i][1], 0.8)
             count = 5
             while count > 0:
                 print(sim_list[0])

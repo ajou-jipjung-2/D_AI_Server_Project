@@ -377,6 +377,7 @@
 
     function layoutAll() {
       var root = myDiagram.findNodeForKey(0);
+      console.log(root.data.loc)
       if (root === null) return;
       myDiagram.startTransaction("Layout");
       // split the nodes and links into two collections
