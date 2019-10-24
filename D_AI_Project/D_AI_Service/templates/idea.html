@@ -218,9 +218,9 @@
     </form>
     {% endif %}
 </div><br>
-<div style="border: 1px solid darkcyan;" id="random_keyword" align="center">
+{% if keyword %}
+<div style="border: 1px solid rgb(39, 97, 114);  border-radius: 40px 80px / 80px 40px; background-color: rgb(168, 222, 238);" id="random_keyword" align="center">
     <br>
-    {% if keyword %}
     <h2>랜덤 키워드 추천</h2>
     <br>
     <div style="display: flex; justify-content: center;">
@@ -230,6 +230,6 @@
     </div><br>
     <button class="sub-button" onclick="reload_keyword()">새 키워드</button>
     <br><br>
-    {% endif %}
 </div>
+{% endif %}
 {% endblock %}
