@@ -155,7 +155,7 @@
 
     .print-dict {
         margin-left: 10px;
-        float: left;
+        /*float: left;*/
         width: auto;
         height: auto;
         padding: 5px 10px;
@@ -227,15 +227,15 @@
         <input type="hidden" id="keynum_check" name="key_num" value={{key_num}}>
         <input type="hidden" id="select_N" name="select_N" value="">
         <input type="hidden" id="select_N2" name="select_N2" value="">
-        <h5>Keyword1</h5>
+        <h4>Keyword1</h4>
         {% for n in N_list %}
         <button type="button" class="print-dict" style="border: 1 solid #82E8D9; background-color: rgb(29, 76, 107);"
                 onclick="formN('{{n}}','but1')">{{n}}
         </button>
         {% endfor %}
         {% if N_list2 %}
-        <br>
-        <h5>Keyword2</h5>
+        <br><br>
+        <h4>Keyword2</h4>
             {% for n in N_list2 %}
             <button type="button" class="print-dict" style="border: 1 solid #82E8D9; background-color: rgb(29, 76, 107);"
                     onclick="formN('{{n}}','but2')">{{n}}
