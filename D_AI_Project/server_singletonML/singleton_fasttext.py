@@ -55,15 +55,8 @@ class singleton_fasttext:
 
     def __init__(self):
         global model, vocab_list, adj_list
-        # print ("print Ldsfasdfasdfasdfasdfasdfsaf",os.getcwd()) #현재 디렉토리의
-        # model = fText.load_facebook_model('Z:\\study\\git\\D_AI_Server_Project\\D_AI_Project\\server_singletonML\\fasttext\\fasttext.bin')
-        # model = fText.load_facebook_model(os.getcwd()+'/server_singletonML/fasttext/fasttext.bin')
-        # print("os.getcwd() :",os.getcwd())
         model = fText.load_facebook_model(os.path.join(os.getcwd(),'server_singletonML','fasttext','fasttext.bin'))
-        # print("load_model_success!!")
-        # vocab_list = open(os.getcwd()+"/server_singletonML/label_list.txt", 'r', encoding="utf-8").read().split()
         vocab_list = load_label()
-        # adj_list = open(os.getcwd()+"/server_singletonML/adj_list.txt", 'r', encoding="utf-8").read().split()
         adj_list = load_adj()
 
     def end_check(self,w):
