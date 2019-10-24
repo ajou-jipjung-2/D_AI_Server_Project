@@ -91,10 +91,14 @@
     {% endif %}
     {% if key_num == '2' %}
     <div>
-        {% for S_l in S_list %}
-        {% for S in S_l %}
+        <h5>Keyword1</h5>
+        {% for S in S_list.0 %}
         <p class="snip1535">{{S}}</p>
         {% endfor %}
+        <br>
+        <h5>Keyword2</h5>
+        {% for S in S_list.1 %}
+        <p class="snip1535">{{S}}</p>
         {% endfor %}
     </div>
     {% endif %}
