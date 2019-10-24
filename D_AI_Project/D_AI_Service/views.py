@@ -3,6 +3,7 @@ import os
 import pymysql
 import datetime, time
 from D_AI_Project.D_AI import keyvalue
+from django.http import HttpResponse, JsonResponse
 import sys
 import random
 import csv
@@ -25,6 +26,16 @@ def home(request):
         conn.close()
 
     return render(request, 'home.html')
+
+def getkeyword(request, keyword):
+    FT = singleton_fasttext.singleton_fasttext.instance()
+    sim_list = FT.makevocab(keyword, 0.8)
+    return JsonResponse(
+        {
+            'keyword' : sim_list[:5],
+        },
+        json_dumps_params={'ensure_ascii': False},
+        content_type="application/json; charset=euc-kr")
 
 def idea(request):
     FT = singleton_fasttext.singleton_fasttext.instance()

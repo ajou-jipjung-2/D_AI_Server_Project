@@ -2,78 +2,84 @@
 {% block content %}
 {% load staticfiles %}
 <style>
-  .mind-button{
-    margin: 10px;
-    width: auto;
-    height: 50px;
-    padding: 5px 10px;
-    text-align: center;
-    font-family: 'BBTreeGB';
-    background-color: rgb(39, 97, 114);
-    color: white;
-    border-radius: 40px 80px / 80px 40px;
-    font-size: 20px;
-  }
+    .mind-button {
+        margin: 10px;
+        width: auto;
+        height: 50px;
+        padding: 5px 10px;
+        text-align: center;
+        font-family: 'BBTreeGB';
+        background-color: rgb(39, 97, 114);
+        color: white;
+        border-radius: 40px 80px / 80px 40px;
+        font-size: 20px;
+    }
 
-  .word-button{
+    .word-button {
 
         border-radius: 40px 80px / 80px 40px;
-      border-color: rgb(39, 97, 114);
-  }
-  .add-button{
+        border-color: rgb(39, 97, 114);
+    }
+
+    .add-button {
 
         border-radius: 40px 80px / 80px 40px;
-    background: #57cb98;
+        background: #57cb98;
         font-family: 'BBTreeGB';
         color: rgb(39, 97, 114);
-  }
-  .mind-box{
-    margin: 10px;
-    height: 50px;
-    width: 270px;
-    font-family: 'BBTreeGB';
-    border-radius: 40px 80px / 80px 40px;
-    background-color: rgba(131, 203, 224, 0.486);
-    font-size: 20px;
-  }
+    }
+
+    .mind-box {
+        margin: 10px;
+        height: 50px;
+        width: 270px;
+        font-family: 'BBTreeGB';
+        border-radius: 40px 80px / 80px 40px;
+        background-color: rgba(131, 203, 224, 0.486);
+        font-size: 20px;
+    }
 </style>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script>
-  function input_new_keyword(){
+    function input_new_keyword() {
         alert('키워드 추가 완료')
         location.reload()
     }
-  function formCheck() {
-    if (document.mindForm.keyword.value == '') {
-        alert("키워드를 입력해주세요!");
-        return false;
+
+    function formCheck() {
+        if (document.mindForm.keyword.value == '') {
+            alert("키워드를 입력해주세요!");
+            return false;
+        }
+        else {
+            document.mindForm.submit();
+            return true;
+        }
     }
-    else {
-        document.mindForm.submit();
-        return true;
-    }
-  }
 </script>
 <h1>단어 마인드맵</h1>
 
 {% if key == "0" %}
 <div id="gridDiv" style="width: 100%; margin: 0px" align="center">
-  <br>
-  <h2>원하는 키워드를 입력하세요.</h2>
-  <form method="POST" action="{% url 'mindmap' %}" name="mindForm">
-    {% csrf_token %}
-    <input type="text" class="mind-box" value="" name="keyword" placeholder="  keyword">
-    <button type="button" class="mind-button" onclick="formCheck();">검색!</button>
-  </form>
+    <br>
+    <h2>원하는 키워드를 입력하세요.</h2>
+    <form method="POST" action="{% url 'mindmap' %}" name="mindForm">
+        {% csrf_token %}
+        <input type="text" class="mind-box" value="" name="keyword" placeholder="  keyword">
+        <button type="button" class="mind-button" onclick="formCheck();">검색!</button>
+    </form>
 </div>
 {% endif %}
 {% if key == "1" %}
 <br>
-  <div id="myDiagramDiv" style="border: solid 1px black; width:100%; max-width: 3000px; height: 400px"></div>
+<div id="myDiagramDiv" style="border: solid 1px black; width:100%; max-width: 3000px; height: 400px"></div>
 
 <!--  <button id="SaveButton" onclick="save()">Save</button>-->
 <!--  <button onclick="load()">Load</button>-->
-        <div id="buttonDiv" align="center"><button class="mind-button" onclick="layoutAll()">Layout</button></div>
-  <textarea id="mySavedModel" style="width:100%; visibility: hidden">
+<div id="buttonDiv" align="center">
+    <button class="mind-button" onclick="layoutAll()">Layout</button>
+</div>
+<textarea id="mySavedModel" style="width:100%; visibility: hidden">
 { "class": "go.TreeModel",
   "nodeDataArray":{{nodeDataArray|safe}}
 }
@@ -84,7 +90,7 @@
     <br>
     <form method="POST" action="{% url 'home' %}" name="inputKeyword">
         {% csrf_token %}
-        <input id="new_keyword" name="new_keyword" type="text" class="word-button"value={{key_list.0}} >
+        <input id="new_keyword" name="new_keyword" type="text" class="word-button" value={{key_list.0}}>
         <button onclick="input_new_keyword()" class="add-button">키워드 추가</button>
     </form>
 </div>
@@ -94,8 +100,8 @@
 <script id="code">
     var color_list = ["#000000"]
     var key_table = []
-    var balance=0
-    var key_num=0
+    var balance = 0
+    var key_num = 0
     console.log("code_stript run")
 
     function getRandomColor() {
@@ -109,404 +115,497 @@
 
 
     function init() {
-      console.log("check init")
-      var $ = go.GraphObject.make;
+        console.log("check init")
+        var $ = go.GraphObject.make;
 
-      myDiagram =
-        $(go.Diagram, "myDiagramDiv",
-          {
-            // when the user drags a node, also move/copy/delete the whole subtree starting with that node
-            "commandHandler.copiesTree": true,
-            "commandHandler.copiesParentKey": true,
-            "commandHandler.deletesTree": true,
-            "draggingTool.dragsTree": false,
-            "undoManager.isEnabled": true
+        myDiagram =
+            $(go.Diagram, "myDiagramDiv",
+                {
+                    // when the user drags a node, also move/copy/delete the whole subtree starting with that node
+                    "commandHandler.copiesTree": true,
+                    "commandHandler.copiesParentKey": true,
+                    "commandHandler.deletesTree": true,
+                    "draggingTool.dragsTree": false,
+                    "undoManager.isEnabled": true
 
-          });
+                });
 
-      // when the document is modified, add a "*" to the title and enable the "Save" button
-      myDiagram.addDiagramListener("Modified", function(e) {
-          console.log("change")
-        var button = document.getElementById("SaveButton");
-        if (button) button.disabled = !myDiagram.isModified;
-        var idx = document.title.indexOf("*");
-        if (myDiagram.isModified) {
-          if (idx < 0) document.title += "*";
-        } else {
-          if (idx >= 0) document.title = document.title.substr(0, idx);
-        }
-      });
-
-      // a node consists of some text with a line shape underneath
-      myDiagram.nodeTemplate =
-        $(go.Node, "Vertical",
-          { selectionObjectName: "TEXT" },
-          $(go.TextBlock,
-            {
-              name: "TEXT",
-              minSize: new go.Size(30, 15),
-              editable: true
-            },
-            // remember not only the text string but the scale and the font in the node data
-            new go.Binding("text", "text").makeTwoWay(),
-            new go.Binding("scale", "scale").makeTwoWay(),
-            new go.Binding("font", "font").makeTwoWay()),
-          $(go.Shape, "LineH",
-            {
-              stretch: go.GraphObject.Horizontal,
-              strokeWidth: 3, height: 3,
-              // this line shape is the port -- what links connect with
-              portId: "", fromSpot: go.Spot.LeftRightSides, toSpot: go.Spot.LeftRightSides
-            },
-            new go.Binding("stroke", "brush"),
-            // make sure links come in from the proper direction and go out appropriately
-            new go.Binding("fromSpot", "dir", function(d) { return spotConverter(d, true); }),
-            new go.Binding("toSpot", "dir", function(d) { return spotConverter(d, false); })),
-          // remember the locations of each node in the node data
-          new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
-          // make sure text "grows" in the desired direction
-          new go.Binding("locationSpot", "dir", function(d) { return spotConverter(d, false); })
-        );
-
-      // selected nodes show a button for adding children
-      myDiagram.nodeTemplate.selectionAdornmentTemplate =
-        $(go.Adornment, "Spot",
-          $(go.Panel, "Auto",
-            // this Adornment has a rectangular blue Shape around the selected node
-            $(go.Shape, { fill: null, stroke: "dodgerblue", strokeWidth: 3 }),
-            $(go.Placeholder, { margin: new go.Margin(4, 4, 0, 4) })
-          ),
-          // and this Adornment has a Button to the right of the selected node
-          $("Button",
-            {
-              alignment: go.Spot.Right,
-              alignmentFocus: go.Spot.Left,
-              click: addNodeAndLink  // define click behavior for this Button in the Adornment
-            },
-            $(go.TextBlock, "+",  // the Button content
-              { font: "bold 8pt sans-serif" })
-          )
-        );
-
-      // the context menu allows users to change the font size and weight,
-      // and to perform a limited tree layout starting at that node
-      myDiagram.nodeTemplate.contextMenu =
-        $("ContextMenu",
-          $("ContextMenuButton",
-            $(go.TextBlock, "Bigger"),
-            { click: function(e, obj) { changeTextSize(obj, 1.1); } }),
-          $("ContextMenuButton",
-            $(go.TextBlock, "Smaller"),
-            { click: function(e, obj) { changeTextSize(obj, 1 / 1.1); } }),
-          $("ContextMenuButton",
-            $(go.TextBlock, "Bold/Normal"),
-            { click: function(e, obj) { toggleTextWeight(obj); } }),
-          $("ContextMenuButton",
-            $(go.TextBlock, "Copy"),
-            { click: function(e, obj) { e.diagram.commandHandler.copySelection(); } }),
-          $("ContextMenuButton",
-            $(go.TextBlock, "Delete"),
-            { click: function(e, obj) { e.diagram.commandHandler.deleteSelection(); } }),
-          $("ContextMenuButton",
-            $(go.TextBlock, "Undo"),
-            { click: function(e, obj) { e.diagram.commandHandler.undo(); } }),
-          $("ContextMenuButton",
-            $(go.TextBlock, "Redo"),
-            { click: function(e, obj) { e.diagram.commandHandler.redo(); } }),
-          $("ContextMenuButton",
-            $(go.TextBlock, "Layout"),
-            {
-              click: function(e, obj) {
-                var adorn = obj.part;
-                adorn.diagram.startTransaction("Subtree Layout");
-                layoutTree(adorn.adornedPart);
-                adorn.diagram.commitTransaction("Subtree Layout");
-              }
+        // when the document is modified, add a "*" to the title and enable the "Save" button
+        myDiagram.addDiagramListener("Modified", function (e) {
+            console.log("change")
+            var button = document.getElementById("SaveButton");
+            if (button) button.disabled = !myDiagram.isModified;
+            var idx = document.title.indexOf("*");
+            if (myDiagram.isModified) {
+                if (idx < 0) document.title += "*";
+            } else {
+                if (idx >= 0) document.title = document.title.substr(0, idx);
             }
-          )
-        );
-
-      // a link is just a Bezier-curved line of the same color as the node to which it is connected
-      myDiagram.linkTemplate =
-        $(go.Link,
-          {
-            curve: go.Link.Bezier,
-            fromShortLength: -2,
-            toShortLength: -2,
-            selectable: false
-          },
-          $(go.Shape,
-            { strokeWidth: 3 },
-            new go.Binding("stroke", "toNode", function(n) {
-              if (n.data.brush) return n.data.brush;
-              return "black";
-            }).ofObject())
-        );
-
-      // the Diagram's context menu just displays commands for general functionality
-      myDiagram.contextMenu =
-        $("ContextMenu",
-          $("ContextMenuButton",
-            $(go.TextBlock, "Paste"),
-            { click: function(e, obj) { e.diagram.commandHandler.pasteSelection(e.diagram.lastInput.documentPoint); } }),
-          $("ContextMenuButton",
-            $(go.TextBlock, "Undo"),
-            { click: function(e, obj) { e.diagram.commandHandler.undo(); } },
-            new go.Binding("visible", "", function(o) { return o.diagram && o.diagram.commandHandler.canUndo(); }).ofObject()),
-          $("ContextMenuButton",
-            $(go.TextBlock, "Redo"),
-            { click: function(e, obj) { e.diagram.commandHandler.redo(); } },
-            new go.Binding("visible", "", function(o) { return o.diagram && o.diagram.commandHandler.canRedo(); }).ofObject()),
-          $("ContextMenuButton",
-            $(go.TextBlock, "Save"),
-            { click: function(e, obj) { save(); } }),
-          $("ContextMenuButton",
-            $(go.TextBlock, "Load"),
-            { click: function(e, obj) { load(); } })
-        );
-
-      myDiagram.addDiagramListener("SelectionMoved", function(e) {
-        var rootX = myDiagram.findNodeForKey(0).location.x;
-        myDiagram.selection.each(function(node) {
-          if (node.data.parent !== 0) return; // Only consider nodes connected to the root
-          var nodeX = node.location.x;
-          if (rootX < nodeX && node.data.dir !== "right") {
-            updateNodeDirection(node, "right");
-          } else if (rootX > nodeX && node.data.dir !== "left") {
-            updateNodeDirection(node, "left");
-          }
-          layoutTree(node);
         });
-      });
-      load();
-      load_parm(myDiagram)
-      // var firstdata = {text:"test",brush: "#0FFFF0",dir:"left",parent: 0,key:1}
-      // var firstdata2 = {text:"test",brush: "#0FFFF0",dir:"right",parent: 0}
-      // var firstdata3 = {text:"test",brush: "#0FFFF0",dir:"right",parent: 1}
-      // var oldnode = myDiagram.findNodeForKey("0")
-      //   console.log("node",oldnode)
-      //   myDiagram.model.addNodeData(firstdata);
-      // myDiagram.model.addNodeData(firstdata2);
-      // myDiagram.model.addNodeData(firstdata3);
-      // // layoutTree(oldnode);
-      // myDiagram.commitTransaction("Add Node");
-      // // if (newnode !== null) myDiagram.scrollToRect(newnode.actualBounds);
-      layoutAll();
-      // read in the predefined graph using the JSON format data held in the "mySavedModel" textarea
+
+        // a node consists of some text with a line shape underneath
+        myDiagram.nodeTemplate =
+            $(go.Node, "Vertical",
+                {selectionObjectName: "TEXT"},
+                $(go.TextBlock,
+                    {
+                        name: "TEXT",
+                        minSize: new go.Size(30, 15),
+                        editable: true
+                    },
+                    // remember not only the text string but the scale and the font in the node data
+                    new go.Binding("text", "text").makeTwoWay(),
+                    new go.Binding("scale", "scale").makeTwoWay(),
+                    new go.Binding("font", "font").makeTwoWay()),
+                $(go.Shape, "LineH",
+                    {
+                        stretch: go.GraphObject.Horizontal,
+                        strokeWidth: 3, height: 3,
+                        // this line shape is the port -- what links connect with
+                        portId: "", fromSpot: go.Spot.LeftRightSides, toSpot: go.Spot.LeftRightSides
+                    },
+                    new go.Binding("stroke", "brush"),
+                    // make sure links come in from the proper direction and go out appropriately
+                    new go.Binding("fromSpot", "dir", function (d) {
+                        return spotConverter(d, true);
+                    }),
+                    new go.Binding("toSpot", "dir", function (d) {
+                        return spotConverter(d, false);
+                    })),
+                // remember the locations of each node in the node data
+                new go.Binding("location", "loc", go.Point.parse).makeTwoWay(go.Point.stringify),
+                // make sure text "grows" in the desired direction
+                new go.Binding("locationSpot", "dir", function (d) {
+                    return spotConverter(d, false);
+                })
+            );
+
+        // selected nodes show a button for adding children
+        myDiagram.nodeTemplate.selectionAdornmentTemplate =
+            $(go.Adornment, "Spot",
+                $(go.Panel, "Auto",
+                    // this Adornment has a rectangular blue Shape around the selected node
+                    $(go.Shape, {fill: null, stroke: "dodgerblue", strokeWidth: 3}),
+                    $(go.Placeholder, {margin: new go.Margin(4, 4, 0, 4)})
+                ),
+                // and this Adornment has a Button to the right of the selected node
+                $("Button",
+                    {
+                        alignment: go.Spot.Right,
+                        alignmentFocus: go.Spot.Left,
+                        click: addNodeAndLink  // define click behavior for this Button in the Adornment
+                    },
+                    $(go.TextBlock, "+",  // the Button content
+                        {font: "bold 8pt sans-serif"})
+                )
+            );
+
+        // the context menu allows users to change the font size and weight,
+        // and to perform a limited tree layout starting at that node
+        myDiagram.nodeTemplate.contextMenu =
+            $("ContextMenu",
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Bigger"),
+                    {
+                        click: function (e, obj) {
+                            changeTextSize(obj, 1.1);
+                        }
+                    }),
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Smaller"),
+                    {
+                        click: function (e, obj) {
+                            changeTextSize(obj, 1 / 1.1);
+                        }
+                    }),
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Bold/Normal"),
+                    {
+                        click: function (e, obj) {
+                            toggleTextWeight(obj);
+                        }
+                    }),
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Copy"),
+                    {
+                        click: function (e, obj) {
+                            e.diagram.commandHandler.copySelection();
+                        }
+                    }),
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Delete"),
+                    {
+                        click: function (e, obj) {
+                            e.diagram.commandHandler.deleteSelection();
+                        }
+                    }),
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Undo"),
+                    {
+                        click: function (e, obj) {
+                            e.diagram.commandHandler.undo();
+                        }
+                    }),
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Redo"),
+                    {
+                        click: function (e, obj) {
+                            e.diagram.commandHandler.redo();
+                        }
+                    }),
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Layout"),
+                    {
+                        click: function (e, obj) {
+                            var adorn = obj.part;
+                            adorn.diagram.startTransaction("Subtree Layout");
+                            layoutTree(adorn.adornedPart);
+                            adorn.diagram.commitTransaction("Subtree Layout");
+                        }
+                    }
+                )
+            );
+
+        // a link is just a Bezier-curved line of the same color as the node to which it is connected
+        myDiagram.linkTemplate =
+            $(go.Link,
+                {
+                    curve: go.Link.Bezier,
+                    fromShortLength: -2,
+                    toShortLength: -2,
+                    selectable: false
+                },
+                $(go.Shape,
+                    {strokeWidth: 3},
+                    new go.Binding("stroke", "toNode", function (n) {
+                        if (n.data.brush) return n.data.brush;
+                        return "black";
+                    }).ofObject())
+            );
+
+        // the Diagram's context menu just displays commands for general functionality
+        myDiagram.contextMenu =
+            $("ContextMenu",
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Paste"),
+                    {
+                        click: function (e, obj) {
+                            e.diagram.commandHandler.pasteSelection(e.diagram.lastInput.documentPoint);
+                        }
+                    }),
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Undo"),
+                    {
+                        click: function (e, obj) {
+                            e.diagram.commandHandler.undo();
+                        }
+                    },
+                    new go.Binding("visible", "", function (o) {
+                        return o.diagram && o.diagram.commandHandler.canUndo();
+                    }).ofObject()),
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Redo"),
+                    {
+                        click: function (e, obj) {
+                            e.diagram.commandHandler.redo();
+                        }
+                    },
+                    new go.Binding("visible", "", function (o) {
+                        return o.diagram && o.diagram.commandHandler.canRedo();
+                    }).ofObject()),
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Save"),
+                    {
+                        click: function (e, obj) {
+                            save();
+                        }
+                    }),
+                $("ContextMenuButton",
+                    $(go.TextBlock, "Load"),
+                    {
+                        click: function (e, obj) {
+                            load();
+                        }
+                    })
+            );
+
+        myDiagram.addDiagramListener("SelectionMoved", function (e) {
+            var rootX = myDiagram.findNodeForKey(0).location.x;
+            myDiagram.selection.each(function (node) {
+                if (node.data.parent !== 0) return; // Only consider nodes connected to the root
+                var nodeX = node.location.x;
+                if (rootX < nodeX && node.data.dir !== "right") {
+                    updateNodeDirection(node, "right");
+                } else if (rootX > nodeX && node.data.dir !== "left") {
+                    updateNodeDirection(node, "left");
+                }
+                layoutTree(node);
+            });
+        });
+        load();
+        load_parm(myDiagram)
+        // var firstdata = {text:"test",brush: "#0FFFF0",dir:"left",parent: 0,key:1}
+        // var firstdata2 = {text:"test",brush: "#0FFFF0",dir:"right",parent: 0}
+        // var firstdata3 = {text:"test",brush: "#0FFFF0",dir:"right",parent: 1}
+        // var oldnode = myDiagram.findNodeForKey("0")
+        //   console.log("node",oldnode)
+        //   myDiagram.model.addNodeData(firstdata);
+        // myDiagram.model.addNodeData(firstdata2);
+        // myDiagram.model.addNodeData(firstdata3);
+        // // layoutTree(oldnode);
+        // myDiagram.commitTransaction("Add Node");
+        // // if (newnode !== null) myDiagram.scrollToRect(newnode.actualBounds);
+        layoutAll();
+        // read in the predefined graph using the JSON format data held in the "mySavedModel" textarea
     }
 
     function spotConverter(dir, from) {
-      if (dir === "left") {
-        return (from ? go.Spot.Left : go.Spot.Right);
-      } else {
-        return (from ? go.Spot.Right : go.Spot.Left);
-      }
+        if (dir === "left") {
+            return (from ? go.Spot.Left : go.Spot.Right);
+        } else {
+            return (from ? go.Spot.Right : go.Spot.Left);
+        }
     }
 
     function changeTextSize(obj, factor) {
-      var adorn = obj.part;
-      adorn.diagram.startTransaction("Change Text Size");
-      var node = adorn.adornedPart;
-      var tb = node.findObject("TEXT");
-      tb.scale *= factor;
-      adorn.diagram.commitTransaction("Change Text Size");
+        var adorn = obj.part;
+        adorn.diagram.startTransaction("Change Text Size");
+        var node = adorn.adornedPart;
+        var tb = node.findObject("TEXT");
+        tb.scale *= factor;
+        adorn.diagram.commitTransaction("Change Text Size");
     }
 
     function toggleTextWeight(obj) {
-      var adorn = obj.part;
-      adorn.diagram.startTransaction("Change Text Weight");
-      var node = adorn.adornedPart;
-      var tb = node.findObject("TEXT");
-      // assume "bold" is at the start of the font specifier
-      var idx = tb.font.indexOf("bold");
-      if (idx < 0) {
-        tb.font = "bold " + tb.font;
-      } else {
-        tb.font = tb.font.substr(idx + 5);
-      }
-      adorn.diagram.commitTransaction("Change Text Weight");
+        var adorn = obj.part;
+        adorn.diagram.startTransaction("Change Text Weight");
+        var node = adorn.adornedPart;
+        var tb = node.findObject("TEXT");
+        // assume "bold" is at the start of the font specifier
+        var idx = tb.font.indexOf("bold");
+        if (idx < 0) {
+            tb.font = "bold " + tb.font;
+        } else {
+            tb.font = tb.font.substr(idx + 5);
+        }
+        adorn.diagram.commitTransaction("Change Text Weight");
     }
 
     function updateNodeDirection(node, dir) {
-      myDiagram.model.setDataProperty(node.data, "dir", dir);
-      // recursively update the direction of the child nodes
-      var chl = node.findTreeChildrenNodes(); // gives us an iterator of the child nodes related to this particular node
-      while (chl.next()) {
-        updateNodeDirection(chl.value, dir);
-      }
+        myDiagram.model.setDataProperty(node.data, "dir", dir);
+        // recursively update the direction of the child nodes
+        var chl = node.findTreeChildrenNodes(); // gives us an iterator of the child nodes related to this particular node
+        while (chl.next()) {
+            updateNodeDirection(chl.value, dir);
+        }
     }
 
     function addNodeAndLink(e, obj) { //+를 눌렀을 떄 작동하는 부분 연동해서 내용 변경 가능할듯
         console.log("check addnodeandlink")
-      var adorn = obj.part;
-      var diagram = adorn.diagram;
-      diagram.startTransaction("Add Node");
-      var oldnode = adorn.adornedPart;
-      var olddata = oldnode.data;
-      console.log("olddata",olddata)
-      now_color =  olddata.brush
-      now_dir =  olddata.dir
+        var adorn = obj.part;
+        var diagram = adorn.diagram;
+        diagram.startTransaction("Add Node");
+        var oldnode = adorn.adornedPart;
+        var olddata = oldnode.data;
+        console.log("olddata", olddata)
+        now_color = olddata.brush
+        now_dir = olddata.dir
         console.log(now_dir)
-      //  balance
-      if(olddata.brush=="#000000"){
-          if(balance>0){
-              now_dir="left"
-              balance-=1
-          }
-          else{
-              now_dir="right"
-              balance+=1
-          }
-          while(1){
-              var now_color = getRandomColor()
-              console.log(now_color)
-              if(color_list.indexOf(now_color)<0){
-                  color_list.push(now_color)
-                  break;
-              }
-          }
-      }
-      // copy the brush and direction to the new node data
-      var newdata = { text: "idea", brush: now_color, dir: now_dir, parent: olddata.key};
-      diagram.model.addNodeData(newdata);
-      layoutTree(oldnode);
-      diagram.commitTransaction("Add Node");
+        //  balance
+        if (olddata.brush == "#000000") {
+            if (balance > 0) {
+                now_dir = "left"
+                balance -= 1
+            }
+            else {
+                now_dir = "right"
+                balance += 1
+            }
+            while (1) {
+                var now_color = getRandomColor()
+                console.log(now_color)
+                if (color_list.indexOf(now_color) < 0) {
+                    color_list.push(now_color)
+                    break;
+                }
+            }
+        }
 
-      // if the new node is off-screen, scroll the diagram to show the new node
-      var newnode = diagram.findNodeForData(newdata);
-      if (newnode !== null) diagram.scrollToRect(newnode.actualBounds);
-      layoutAll();
-      // while(1){
-          var vpb = myDiagram.viewportBounds;
-          var db = myDiagram.documentBounds;
+
+        input_keyword = olddata["text"];
+        console.log("@@@@@" + input_keyword)
+        jsondata = httpGet("http://121.124.159.170:4535/getkeyword/" + input_keyword)
+        jsondata = JSON.parse(jsondata)
+
+        // var keywordjson = request;
+        for (i = 0; i < 5; i++) {
+            var newdata = {text: jsondata["keyword"][i], brush: now_color, dir: now_dir, parent: olddata.key};
+            diagram.model.addNodeData(newdata);
+        }
+
+        layoutTree(oldnode);
+        diagram.commitTransaction("Add Node");
+
+        // if the new node is off-screen, scroll the diagram to show the new node
+        var newnode = diagram.findNodeForData(newdata);
+        if (newnode !== null) diagram.scrollToRect(newnode.actualBounds);
+        layoutAll();
+        // while(1){
+        var vpb = myDiagram.viewportBounds;
+        var db = myDiagram.documentBounds;
         console.log(vpb.height)
         console.log(db.height)
-          if(vpb.height<db.height){
-              value = $('#myDiagramDiv').height()
-              $('#myDiagramDiv').height(value + db.height-vpb.height)
-          }
-          else{
-              // break;
-          }
-      // }
+        if (vpb.height < db.height) {
+            value = $('#myDiagramDiv').height()
+            $('#myDiagramDiv').height(value + db.height - vpb.height)
+        }
+        else {
+            // break;
+        }
+        // }
+    }
+
+    function httpGet(theUrl) {
+        var xmlHttp = new XMLHttpRequest();
+        xmlHttp.open("GET", theUrl, false); // false for synchronous request
+        xmlHttp.send(null);
+        return xmlHttp.responseText;
+    }
+
+    function getJSONP(url, success) {
+
+        var ud = '_' + +new Date,
+            script = document.createElement('script'),
+            head = document.getElementsByTagName('head')[0]
+                || document.documentElement;
+
+        window[ud] = function (data) {
+            head.removeChild(script);
+            success && success(data);
+        };
+
+        script.src = url.replace('callback=?', 'callback=' + ud);
+        head.appendChild(script);
+
     }
 
     function layoutTree(node) {
-      if (node.data.key === 0) {  // adding to the root?
-        layoutAll();  // lay out everything
-      } else {  // otherwise lay out only the subtree starting at this parent node
-        var parts = node.findTreeParts();
-        layoutAngle(parts, node.data.dir === "left" ? 180 : 0);
-      }
+        if (node.data.key === 0) {  // adding to the root?
+            layoutAll();  // lay out everything
+        } else {  // otherwise lay out only the subtree starting at this parent node
+            var parts = node.findTreeParts();
+            layoutAngle(parts, node.data.dir === "left" ? 180 : 0);
+        }
     }
 
     function layoutAngle(parts, angle) {
-      var layout = go.GraphObject.make(go.TreeLayout,
-        {
-          angle: angle,
-          arrangement: go.TreeLayout.ArrangementFixedRoots,
-          nodeSpacing: 10,
-          layerSpacing: 50,
-          setsPortSpot: false, // don't set port spots since we're managing them with our spotConverter function
-          setsChildPortSpot: false
-        });
-      layout.doLayout(parts);
+        var layout = go.GraphObject.make(go.TreeLayout,
+            {
+                angle: angle,
+                arrangement: go.TreeLayout.ArrangementFixedRoots,
+                nodeSpacing: 10,
+                layerSpacing: 50,
+                setsPortSpot: false, // don't set port spots since we're managing them with our spotConverter function
+                setsChildPortSpot: false
+            });
+        layout.doLayout(parts);
     }
 
     function layoutAll() {
-      var root = myDiagram.findNodeForKey(0);
-      console.log(root.data.loc)
-      if (root === null) return;
-      myDiagram.startTransaction("Layout");
-      // split the nodes and links into two collections
-      var rightward = new go.Set(/*go.Part*/);
-      var leftward = new go.Set(/*go.Part*/);
-      root.findLinksConnected().each(function(link) {
-        var child = link.toNode;
-        if (child.data.dir === "left") {
-          leftward.add(root);  // the root node is in both collections
-          leftward.add(link);
-          leftward.addAll(child.findTreeParts());
-        } else {
-          rightward.add(root);  // the root node is in both collections
-          rightward.add(link);
-          rightward.addAll(child.findTreeParts());
-        }
-      });
-      // do one layout and then the other without moving the shared root node
-      layoutAngle(rightward, 0);
-      layoutAngle(leftward, 180);
-      myDiagram.commitTransaction("Layout");
+        var root = myDiagram.findNodeForKey(0);
+        console.log(root.data.loc)
+        if (root === null) return;
+        myDiagram.startTransaction("Layout");
+        // split the nodes and links into two collections
+        var rightward = new go.Set(/*go.Part*/);
+        var leftward = new go.Set(/*go.Part*/);
+        root.findLinksConnected().each(function (link) {
+            var child = link.toNode;
+            if (child.data.dir === "left") {
+                leftward.add(root);  // the root node is in both collections
+                leftward.add(link);
+                leftward.addAll(child.findTreeParts());
+            } else {
+                rightward.add(root);  // the root node is in both collections
+                rightward.add(link);
+                rightward.addAll(child.findTreeParts());
+            }
+        });
+        // do one layout and then the other without moving the shared root node
+        layoutAngle(rightward, 0);
+        layoutAngle(leftward, 180);
+        myDiagram.commitTransaction("Layout");
     }
 
     // Show the diagram's model in JSON format
     function save() {
-      document.getElementById("mySavedModel").value = myDiagram.model.toJson();
-      myDiagram.isModified = false;
-    }
-    function load() {
-        console.log("load")
-      myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
-      console.log("laod value",document.getElementById("mySavedModel").value)
+        document.getElementById("mySavedModel").value = myDiagram.model.toJson();
+        myDiagram.isModified = false;
     }
 
-    function load_parm(diagram){
+    function load() {
+        console.log("load")
+        myDiagram.model = go.Model.fromJson(document.getElementById("mySavedModel").value);
+        console.log("laod value", document.getElementById("mySavedModel").value)
+    }
+
+    function load_parm(diagram) {
 
         keyword = "{{keyword}}"
         sim_table = "{{sim_table|safe}}"
         sim_table = sim_table.replace(/'/g, '"');
         sim_table = JSON.parse(sim_table);
-        key_table.push([keyword,0])
+        key_table.push([keyword, 0])
 
         console.log(keyword)
         console.log(sim_table)
 
         // var index = key_table.map(obj => obj[0]).indexOf("A");
         // console.log("index",index)
-        sim_table.forEach(function(sim_element){
+        sim_table.forEach(function (sim_element) {
             console.log(key_table)
-            console.log("indexof :",key_table.map(obj => obj[0]).indexOf(sim_element[0]))
-            if(key_table.map(obj => obj[0]).indexOf(sim_element[0])>-1){
+            console.log("indexof :", key_table.map(obj => obj[0]).indexOf(sim_element[0]))
+            if (key_table.map(obj => obj[0]).indexOf(sim_element[0]) > -1) {
                 parent_key = key_table[key_table.map(obj => obj[0]).indexOf(sim_element[0])][1]
                 var parent_node = myDiagram.findNodeForKey(parent_key)
-                console.log("parent_key",parent_key)
-                console.log("parent_node",parent_node,parent_node.data.dir,parent_node.data.brush)
+                console.log("parent_key", parent_key)
+                console.log("parent_node", parent_node, parent_node.data.dir, parent_node.data.brush)
                 now_dir = parent_node.data.dir
                 now_brush = parent_node.data.brush
                 key_num++
-                key_table.push([sim_element[1],key_num])
-                if(parent_key==0){
-                    if(balance>0){
-                        now_dir="left"
-                        balance-=1
+                key_table.push([sim_element[1], key_num])
+                if (parent_key == 0) {
+                    if (balance > 0) {
+                        now_dir = "left"
+                        balance -= 1
                     }
-                    else{
-                        now_dir="right"
-                        balance+=1
+                    else {
+                        now_dir = "right"
+                        balance += 1
                     }
-                    while(1){
+                    while (1) {
                         now_brush = getRandomColor()
                         console.log(now_brush)
-                        if(color_list.indexOf(now_brush)<0){
+                        if (color_list.indexOf(now_brush) < 0) {
                             color_list.push(now_brush)
                             break;
                         }
                     }
                 }
-                var newdata = {text:sim_element[1],brush: now_brush,dir:now_dir,parent: parent_key,key:key_num}
+                var newdata = {text: sim_element[1], brush: now_brush, dir: now_dir, parent: parent_key, key: key_num}
                 diagram.model.addNodeData(newdata);
             }
             // var newdata = {text:sim_element[1],brush: "#0FFFF0",dir:"left",parent: 0,key:1}
         });
         layoutAll();
-         var vpb = myDiagram.viewportBounds;
-          var db = myDiagram.documentBounds;
+        var vpb = myDiagram.viewportBounds;
+        var db = myDiagram.documentBounds;
         console.log(vpb.height)
         console.log(db.height)
-          if(vpb.height<db.height){
-              value = $('#myDiagramDiv').height()
-              $('#myDiagramDiv').height(value + db.height-vpb.height)
-          }
+        if (vpb.height < db.height) {
+            value = $('#myDiagramDiv').height()
+            $('#myDiagramDiv').height(value + db.height - vpb.height)
+        }
 
 
         // test_list = JSON.parse(test_list);
@@ -514,29 +613,29 @@
         // console.log("test:",test_list[2])
         // var firstdata = {text:"test",brush: "#0FFFF0",dir:"left",parent: 0}
         // diagram.model.addNodeData(firstdata);
-      //    var newdata = { text: "idea", brush: now_color, dir: now_dir, parent: olddata.key};
-      // diagram.model.addNodeData(newdata);
-      // layoutTree(oldnode);
-      // diagram.commitTransaction("Add Node");
-      //
-      // // if the new node is off-screen, scroll the diagram to show the new node
-      // var newnode = diagram.findNodeForData(newdata);
-      // if (newnode !== null) diagram.scrollToRect(newnode.actualBounds);
-      // layoutAll();
-      // // while(1){
-      //     var vpb = myDiagram.viewportBounds;
-      //     var db = myDiagram.documentBounds;
-      //   console.log(vpb.height)
-      //   console.log(db.height)
-      //     if(vpb.height<db.height){
-      //         value = $('#myDiagramDiv').height()
-      //         $('#myDiagramDiv').height(value + db.height-vpb.height)
-      //     }
-      //     else{
-      //         // break;
-      //     }
+        //    var newdata = { text: "idea", brush: now_color, dir: now_dir, parent: olddata.key};
+        // diagram.model.addNodeData(newdata);
+        // layoutTree(oldnode);
+        // diagram.commitTransaction("Add Node");
+        //
+        // // if the new node is off-screen, scroll the diagram to show the new node
+        // var newnode = diagram.findNodeForData(newdata);
+        // if (newnode !== null) diagram.scrollToRect(newnode.actualBounds);
+        // layoutAll();
+        // // while(1){
+        //     var vpb = myDiagram.viewportBounds;
+        //     var db = myDiagram.documentBounds;
+        //   console.log(vpb.height)
+        //   console.log(db.height)
+        //     if(vpb.height<db.height){
+        //         value = $('#myDiagramDiv').height()
+        //         $('#myDiagramDiv').height(value + db.height-vpb.height)
+        //     }
+        //     else{
+        //         // break;
+        //     }
     }
 
     init()
-  </script>
+</script>
 {% endblock %}
