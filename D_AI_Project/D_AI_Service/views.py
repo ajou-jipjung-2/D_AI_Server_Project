@@ -53,7 +53,9 @@ def idea(request):
             N_list = FT.makevocab1(keyword1,float(association))
         elif key_num=='2':
             N_list = FT.makevocab2(keyword1,keyword2,float(association))
-        print(N_list)
+            N_list2 = FT.makevocab3(keyword1, keyword2, float(association))
+        print("N_list",N_list)
+        print("N_list2", N_list2)
         # N_list = ['당근', '사과', '포도', '딸기', '아주대', '소웨', '혁중', '지석', '도연', '2조','당근', '사과', '포도', '딸기', '아주대', '소웨', '혁중', '지석', '도연', '2조','당근', '사과', '포도', '딸기', '아주대', '소웨', '혁중', '지석', '도연', '2조']
         return render(request, 'idea.html', {'N_list': N_list,'key_list':key_list,'key_num':key_num})
     else:
@@ -102,6 +104,7 @@ def mindmap(request):
         print(nodeDataArray)
         sim_table=[]
         vocab_table=[keyword]
+        print("vocab_table",vocab_table)
         # sim_table=[[keyword,"A"],
         #            [keyword, "B"],
         #            [keyword, "C"],

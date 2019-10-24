@@ -54,7 +54,8 @@
 
     .snip1535:hover,
     .snip1535.hover {
-        background-color: rgb(114, 1, 0);
+        background-color: rgba(59, 156, 179, 0.47);
+        color : black;
     }
 
     .snip1535:hover:before,
@@ -84,7 +85,7 @@
     {% if key_num == '1' %}
     <div>
         {% for S in S_list %}
-        <span class="print-dict">{{S}}</span>
+        <p class="snip1535">{{S}}</p>
         {% endfor %}
     </div>
     {% endif %}

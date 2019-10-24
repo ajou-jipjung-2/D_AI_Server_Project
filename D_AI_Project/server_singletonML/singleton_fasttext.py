@@ -112,7 +112,7 @@ class singleton_fasttext:
             # if vocab > min and vocab < max:
             sm_A_list.append([vocab_item, vocab])
         sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
-        out = random.sample(sm_A_list[:30], 10)
+        out = random.sample(sm_A_list[:20], 20)
         out_index = [i[0] for i in out]
         return out_index
 
@@ -129,6 +129,7 @@ class singleton_fasttext:
         # sm_A_list_index = [i[0] for i in sm_A_list[:30]]
         s = int(len(sm_A_list) * association)
         e = int(len(sm_A_list) * (association+0.2))
+        # out = random.sample(sm_A_list[s:e], 30)
         out = random.sample(sm_A_list[s:e], 30)
         out_index = [i[0] for i in out]
         return out_index
@@ -143,10 +144,30 @@ class singleton_fasttext:
             vocab1 = model.similarity(vocab_item_convert, k1_convert)
             vocab2 = model.similarity(vocab_item_convert, k2_convert)
             #         if vocab1>min and vocab1<max and vocab2>min and vocab2<max:
-            sm_A_list.append([vocab_item, vocab1 * (1 - vocab2)])
+            sm_A_list.append([vocab_item, vocab1 * (1-vocab2)])
         sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
-        s = int(len(sm_A_list) * association)
-        e = int(len(sm_A_list) * (association + 0.2))
+        e = int(len(sm_A_list) * (1-association))
+        s = int(len(sm_A_list) * (1-(association + 0.1)))
+        print("s,e : ",s,e)
+        out = random.sample(sm_A_list[s:e], 30)
+        out_index = [i[0] for i in out]
+        return out_index
+
+    def makevocab3(self,k1, k2, association):
+        global model, vocab_list, adj_list
+        sm_A_list = []
+        k1_convert = self.convert(k1)
+        k2_convert = self.convert(k2)
+        for vocab_item in vocab_list:
+            vocab_item_convert = self.convert(vocab_item)
+            vocab1 = model.similarity(vocab_item_convert, k1_convert)
+            vocab2 = model.similarity(vocab_item_convert, k2_convert)
+            #         if vocab1>min and vocab1<max and vocab2>min and vocab2<max:
+            sm_A_list.append([vocab_item, vocab1 * vocab2])
+        sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
+        e = int(len(sm_A_list) * (1-association))
+        s = int(len(sm_A_list) * (1-(association + 0.1)))
+        print("s,e : ",s,e)
         out = random.sample(sm_A_list[s:e], 30)
         out_index = [i[0] for i in out]
         return out_index
@@ -171,7 +192,7 @@ class singleton_fasttext:
             adj_item_convert = self.convert(adj_item)
             a = model.similarity(adj_item_convert, sen1_convert)
             en = model.similarity(adj_item_convert, sel_N_convert)
-            b = model.similarity(adj_item_convert, sen1_convert)
+            b = model.similarity(adj_item_convert, sen2_convert)
             ab = [[sen1, a], [sen2, b]]
             ab = sorted(ab, key=lambda acc: acc[1], reverse=True)
             adj_A_list.append([ab[0][0] + " " + adj_item + " " + sel_N, ab[0][1] * en])

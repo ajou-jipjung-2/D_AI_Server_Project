@@ -29,6 +29,7 @@
     }
 
     .mind-box {
+        padding-left: 20px;
         margin: 10px;
         height: 50px;
         width: 270px;
@@ -64,7 +65,7 @@
     <h2>원하는 키워드를 입력하세요.</h2>
     <form method="POST" action="{% url 'mindmap' %}" name="mindForm">
         {% csrf_token %}
-        <input type="text" class="mind-box" value="" name="keyword" placeholder="  keyword">
+        <input type="text" class="mind-box" value="" name="keyword" placeholder="keyword">
         <button type="button" class="mind-button" onclick="formCheck();">검색!</button>
     </form>
 </div>
