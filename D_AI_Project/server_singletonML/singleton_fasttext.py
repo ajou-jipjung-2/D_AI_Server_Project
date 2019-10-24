@@ -127,8 +127,8 @@ class singleton_fasttext:
             sm_A_list.append([vocab_item, vocab])
         sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
         # sm_A_list_index = [i[0] for i in sm_A_list[:30]]
-        s = int(len(sm_A_list) * association)
-        e = int(len(sm_A_list) * (association+0.2))
+        e = int(len(sm_A_list) * (1-association))
+        s = int(len(sm_A_list) * (1-(association+0.05)))
         # out = random.sample(sm_A_list[s:e], 30)
         out = random.sample(sm_A_list[s:e], 30)
         out_index = [i[0] for i in out]
@@ -147,7 +147,7 @@ class singleton_fasttext:
             sm_A_list.append([vocab_item, vocab1 * (1-vocab2)])
         sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
         e = int(len(sm_A_list) * (1-association))
-        s = int(len(sm_A_list) * (1-(association + 0.1)))
+        s = int(len(sm_A_list) * (1-(association + 0.05)))
         print("s,e : ",s,e)
         out = random.sample(sm_A_list[s:e], 30)
         out_index = [i[0] for i in out]
@@ -166,7 +166,7 @@ class singleton_fasttext:
             sm_A_list.append([vocab_item, vocab1 * vocab2])
         sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
         e = int(len(sm_A_list) * (1-association))
-        s = int(len(sm_A_list) * (1-(association + 0.1)))
+        s = int(len(sm_A_list) * (1-(association + 0.05)))
         print("s,e : ",s,e)
         out = random.sample(sm_A_list[s:e], 30)
         out_index = [i[0] for i in out]
