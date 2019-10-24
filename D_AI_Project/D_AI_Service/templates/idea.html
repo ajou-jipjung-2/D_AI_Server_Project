@@ -30,11 +30,27 @@
         key_num.value = 2;
     }
 
-    function formN(sel_N) {
+    function formN(sel_N, but) {
         var select_N = document.getElementById("select_N");
-        select_N.value = sel_N;
-        document.selectNForm.submit();
-        return true;
+        var select_N2 = document.getElementById("select_N2");
+        var key_num = document.getElementById("keynum_check");
+        if(key_num.value == '1'){
+            select_N.value = sel_N;
+            document.selectNForm.submit();
+            return true;
+        } else if(key_num.value == '2'){
+            if(but == 'but1'){
+                select_N.value = sel_N;
+            }else if(but == 'but2'){
+                select_N2.value = sel_N;
+            }
+            if(select_N.value != '' && select_N2.value !=''){
+                document.selectNForm.submit();
+                return true;
+            }
+            return false;
+        }
+        return false;
     }
 
     function formCheck() {
@@ -208,13 +224,24 @@
         <!--            <input type="hidden" id="keyword1" name="keyword1" value={{key_list.0}}>-->
         <input type="hidden" id="keyword1" name="keyword1" value={{key_list.0}}>
         <input type="hidden" id="keyword2" name="keyword2" value={{key_list.1}}>
-        <input type="hidden" id="keynum" name="key_num" value={{key_num}}>
+        <input type="hidden" id="keynum_check" name="key_num" value={{key_num}}>
         <input type="hidden" id="select_N" name="select_N" value="">
+        <input type="hidden" id="select_N2" name="select_N2" value="">
+        <h5>Keyword1</h5>
         {% for n in N_list %}
-        <button class="print-dict" style="border: 1 solid #82E8D9; background-color: rgb(29, 76, 107);"
-                onclick="formN('{{n}}')">{{n}}
+        <button type="button" class="print-dict" style="border: 1 solid #82E8D9; background-color: rgb(29, 76, 107);"
+                onclick="formN('{{n}}','but1')">{{n}}
         </button>
         {% endfor %}
+        {% if N_list2 %}
+        <br>
+        <h5>Keyword2</h5>
+            {% for n in N_list2 %}
+            <button type="button" class="print-dict" style="border: 1 solid #82E8D9; background-color: rgb(29, 76, 107);"
+                    onclick="formN('{{n}}','but2')">{{n}}
+            </button>
+            {% endfor %}
+        {% endif %}
     </form>
     {% endif %}
 </div><br>
