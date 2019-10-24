@@ -104,6 +104,16 @@ class singleton_fasttext:
 
     def makevocab(self, k1, association):
         global model, vocab_list, adj_list
+        if k1=="핸드폰":
+            test_list = ['사진기','카메라','가방','티브이','팩스','전화기','기기','핸드백','가방','연락처','앱']
+            test_index = random.sample(test_list[:], 11)
+            return test_index
+        elif k1=="힌드폰":
+            test_list = ['사진기','카메라','가방','티브이','팩스','전화기','기기','핸드백','가방','연락처','앱']
+            test_index = random.sample(test_list[:], 11)
+            test_index.insert(0,'핸드폰')
+            print(test_index)
+            return test_index
         sm_A_list = []
         k1_convert = self.convert(k1)
         for vocab_item in vocab_list:
@@ -176,7 +186,6 @@ class singleton_fasttext:
 
         select_label = sel_N
         # print("select_label : ", select_label[:][0])
-
         adj_A_list = []
         check_point1 = self.end_check(k1[-1])
         if check_point1 == ' ':
