@@ -104,16 +104,6 @@ class singleton_fasttext:
 
     def makevocab(self, k1, association):
         global model, vocab_list, adj_list
-        if k1=="핸드폰":
-            test_list = ['사진기','카메라','가방','티브이','팩스','전화기','기기','핸드백','가방','연락처','앱']
-            test_index = random.sample(test_list[:], 11)
-            return test_index
-        elif k1=="힌드폰":
-            test_list = ['사진기','카메라','가방','티브이','팩스','전화기','기기','핸드백','가방','연락처','앱']
-            test_index = random.sample(test_list[:], 11)
-            test_index.insert(0,'핸드폰')
-            print(test_index)
-            return test_index
         sm_A_list = []
         k1_convert = self.convert(k1)
         for vocab_item in vocab_list:
@@ -133,13 +123,10 @@ class singleton_fasttext:
         for vocab_item in vocab_list:
             vocab_item_convert = self.convert(vocab_item)
             vocab = model.similarity(vocab_item_convert, k1_convert)
-            # if vocab > min and vocab < max:
             sm_A_list.append([vocab_item, vocab])
         sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
-        # sm_A_list_index = [i[0] for i in sm_A_list[:30]]
         e = int(len(sm_A_list) * (1-association))
         s = int(len(sm_A_list) * (1-(association+0.05)))
-        # out = random.sample(sm_A_list[s:e], 30)
         out = random.sample(sm_A_list[s:e], 30)
         out_index = [i[0] for i in out]
         return out_index
@@ -153,7 +140,6 @@ class singleton_fasttext:
             vocab_item_convert = self.convert(vocab_item)
             vocab1 = model.similarity(vocab_item_convert, k1_convert)
             vocab2 = model.similarity(vocab_item_convert, k2_convert)
-            #         if vocab1>min and vocab1<max and vocab2>min and vocab2<max:
             sm_A_list.append([vocab_item, vocab1 * (1-vocab2)])
         sm_A_list = sorted(sm_A_list, key=lambda acc: acc[1], reverse=True)
         e = int(len(sm_A_list) * (1-association))
